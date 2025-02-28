@@ -1,0 +1,26 @@
+export type RootStackParamList = {
+    Onboarding: undefined;
+    Home: undefined;
+    ChangeLanguage: undefined;
+    LoginScreen: undefined;
+    LoginVerification: undefined;
+    ForgotPassword: undefined;
+    ForgotPasswordVerification: undefined;
+    ChooseNewPassword: undefined;
+    Register: undefined;
+    RegisterVerification: undefined;
+    ChoosePassword: undefined;
+    RegisterPersonalInformations: undefined;
+    RegisterLocationInformations: undefined;
+    Profile: undefined;
+    SelectCountry: undefined;
+    Settings: undefined;
+    EditSettings: undefined;
+    ChangePassword: undefined;
+    DataSecurityAndPrivacy: undefined;
+    AccountVerify: undefined;
+    SavedCards: undefined;
+    RequestSupport: undefined;
+    TransactionDetails: undefined;
+    NewTransaction: undefined;
+}; 
