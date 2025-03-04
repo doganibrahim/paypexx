@@ -1,10 +1,10 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View, Image } from 'react-native';
 
-const CustomButton = ({ title, onPress, backgroundColor = '#57B03C', width, height, textColor = '#FFF', icon, textSize = 18 }) => {
+const CustomButton = ({ title, onPress, backgroundColor = '#57B03C', borderColor = '#57B03C', borderWidth = 0, width, height, textColor = '#FFF', icon, textSize = 18, borderRadius = 14 }) => {
     return (
         <TouchableOpacity
-            style={[styles.button, { backgroundColor, width: width, height: height }]}
+            style={[styles.button, { backgroundColor, width: width, height: height, borderRadius: borderRadius, borderColor: borderColor, borderWidth: borderWidth }]}
             onPress={onPress}
         >
             <View style={styles.buttonContent}>

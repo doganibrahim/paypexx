@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { countries } from '../../constants/countries';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import countries from '../../constants/countries';
 
 const SelectCountry = ({ navigation, route }) => {
     const [selectedCountry, setSelectedCountry] = useState(countries[0]);
@@ -10,6 +10,7 @@ const SelectCountry = ({ navigation, route }) => {
         if (route.params?.onSelect) {
             route.params.onSelect(country);
         }
+        navigation.goBack();
     };
 
     return (
@@ -22,8 +23,8 @@ const SelectCountry = ({ navigation, route }) => {
                         style={[styles.countryItem]}
                         onPress={() => handleCountrySelect(country)}
                     >
-                        <Text style={styles.flag}>{country.flag}</Text>
-                        <Text style={styles.countryName}>{country.label}</Text>
+                        <Image source={country.flag} style={styles.flag} />
+                        <Text style={styles.countryName}>{country.country}</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
@@ -49,8 +50,10 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
     },
     flag: {
-        fontSize: 24,
-        marginRight: 14,
+        width: 24,
+        height: 24,
+        marginRight: 20,
+        borderRadius: 5,
     },
     countryName: {
         fontSize: 16,

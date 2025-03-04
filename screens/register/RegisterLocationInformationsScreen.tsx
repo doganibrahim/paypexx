@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity, ScrollView, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const RegisterLocationInformationsScreen = ({navigation}) => {
-    const goSelectCountry = () => {
-        navigation.navigate('SelectCountry');
-    }
     const [selectedCountry, setSelectedCountry] = useState({
-        key: 'TR',
+        key: 'tr',
         label: 'Türkiye',
         dialCode: '+90',
-        flag: '🇹🇷'
+        flag: require('../../assets/images/flags/tr.png')
     });
+
+    const goSelectCountry = () => {
+        navigation.navigate('SelectCountry', {
+            onSelect: (country) => {
+                setSelectedCountry({
+                    key: country.key,
+                    label: country.country,
+                    dialCode: country.dialCode,
+                    flag: country.flag
+                });
+            }
+        });
+    }
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -28,13 +39,12 @@ const RegisterLocationInformationsScreen = ({navigation}) => {
                     <View style={{marginBottom: 10}}>
                         <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Ülke</Text>
                         <TouchableOpacity style={styles.container} onPress={goSelectCountry}>
-
-                        <View style={styles.flagContainer}>
-                            <Text style={styles.flag}>{selectedCountry.flag}</Text>
-                        </View>
-                        <Text style={styles.countryName}>{selectedCountry.label}</Text>
-                        <Ionicons name="chevron-down" size={24} color="#666" />
-                    </TouchableOpacity>
+                            <View style={styles.flagContainer}>
+                                <Image source={selectedCountry.flag} style={styles.flag} />
+                            </View>
+                            <Text style={styles.countryName}>{selectedCountry.label}</Text>
+                            <Ionicons name="chevron-down" size={24} color="#666" />
+                        </TouchableOpacity>
                     </View>
 
                     <View style={{marginBottom: 10}}>
@@ -96,12 +106,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f2f2',
     },
     flagContainer: {
-        width: 20,
-        height: 20,
+        width: 24,
+        height: 24,
         marginRight: 10,
     },
     flag: {
-        fontSize: 16,
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
     },
     countryName: {
         flex: 1,

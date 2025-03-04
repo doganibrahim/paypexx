@@ -1,31 +1,60 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import BottomMenu from '../../components/BottomMenu';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
-import CustomButton from '../../components/CustomButton';
+import CustomButtonEndIcon from '../../components/EndIconCustomButton';
+import LottieView from 'lottie-react-native';
+import senderCurrencies from '../../constants/senderCurrencies';
+import receiverCurrencies from '../../constants/receiverCurrencies';
+import { useCurrency } from '../../context/CurrencyContext';
 
 const { width } = Dimensions.get('window');
 const scale = (size: number) => (width / 375) * size;
 
-const NewTransaction = () => {
+// Tip tanımlaması ekleyelim
+type Currency = {
+    country: string;
+    currency: string;
+    symbol: string;
+    flag: any;
+}
+
+const NewTransaction = ({ navigation }: { navigation: any }) => {
     const [amount, setAmount] = useState('100');
     const [receivedAmount, setReceivedAmount] = useState('2.37');
-    const navigation = useNavigation();
+    const confettiRef = React.useRef<LottieView>(null);
+    const clockRef = React.useRef<LottieView>(null);
+    
+    const { senderCurrency, receiverCurrency } = useCurrency();
+
+    const handleSenderCurrency = () => {
+        navigation.navigate('SenderCurrency');
+    }
+
+    const handleReceiverCurrency = () => {
+        navigation.navigate('ReceiverCurrency');
+    }
+
+    const handleNext = () => {
+        navigation.navigate('NewTransactionReceiver');
+    }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Transfer ayrıntıları</Text>
+        <View>
+        <Text style={styles.title}>Transfer ayrıntıları</Text>
             
             <Text style={styles.label}>Gönderen</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleSenderCurrency}>
             <View style={styles.currencyBox}>
                 <Image 
-                    source={require('../../assets/images/flags/tr.png')} 
+                    source={senderCurrency?.flag || senderCurrencies[0].flag} 
                     style={styles.flag}
                 />
-                <Text style={styles.currencyCode}>TRY</Text>
+                <Text style={styles.currencyCode}>
+                    {senderCurrency?.currency || senderCurrencies[0].currency}
+                </Text>
                 <Image 
                     source={require('../../assets/images/icons/transaction/dropDown.png')}
                     style={styles.dropdownIcon}
@@ -35,13 +64,15 @@ const NewTransaction = () => {
             </TouchableOpacity>
 
             <Text style={styles.label}>Alıcı</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleReceiverCurrency}>
             <View style={styles.currencyBox}>
                 <Image 
-                    source={require('../../assets/images/flags/tr.png')} 
+                    source={receiverCurrency?.flag || receiverCurrencies[0].flag} 
                     style={styles.flag}
                 />
-                <Text style={styles.currencyCode}>EUR</Text>
+                <Text style={styles.currencyCode}>
+                    {receiverCurrency?.currency || receiverCurrencies[0].currency}
+                </Text>
                 <Image 
                     source={require('../../assets/images/icons/transaction/dropDown.png')}
                     style={styles.dropdownIcon}
@@ -51,12 +82,23 @@ const NewTransaction = () => {
             </TouchableOpacity>
             {/* Kur Bilgisi */}
             <View style={styles.rateContainer}>
-                <Text style={styles.rateText}>⭐ 1 TRY = 0.02625 EUR</Text>
+                <LottieView 
+                    source={require('../../assets/images/icons/transaction/star6.json')}
+                    style={{width: scale(28), height: scale(28), marginLeft: scale(10)}}
+                    autoPlay
+                />
+                <Text style={styles.rateText}>1 TRY = 0.0265 EUR</Text>
             </View>
-
             {/* Bilgi Metni */}
-            <Image style={{width: scale(100), height: scale(100), alignSelf: 'center'}} source={require('../../assets/images/icons/transaction/confetti.gif')} />
             <View style={styles.infoContainer}>
+                <View style={{flexDirection: 'row'}}>
+                <LottieView 
+                    ref={confettiRef}
+                    key="confetti-animation"
+                    source={require('../../assets/images/icons/transaction/confetti6.json')}
+                    style={{width: scale(26), height: scale(26)}}
+                    autoPlay
+                />
                 <MaskedView
                     maskElement={
                         <Text style={styles.infoText}>
@@ -71,15 +113,24 @@ const NewTransaction = () => {
                         style={{height: scale(24)}}
                     >
                         <Text style={[styles.infoText, {opacity: 0}]}>
-                            🎉 Tüm transferler ücretsizdir
+                            Tüm transferler ücretsizdir
                         </Text>
                     </LinearGradient>
                 </MaskedView>
+                </View>
 
+                <View style={{flexDirection: 'row'}}>
+                <LottieView 
+                    ref={clockRef}
+                    key="clock-animation"
+                    source={require('../../assets/images/icons/transaction/clock12.json')}
+                    style={{width: scale(26), height: scale(26)}}
+                    autoPlay
+                />
                 <MaskedView
                     maskElement={
                         <Text style={styles.infoText}>
-                            ⏱ 30 dakikada teslim garantisi
+                            30 dakikada teslim garantisi
                         </Text>
                     }
                 >
@@ -90,16 +141,16 @@ const NewTransaction = () => {
                         style={{height: scale(24)}}
                     >
                         <Text style={[styles.infoText, {opacity: 0}]}>
-                            ⏱ 30 dakikada teslim garantisi
+                            30 dakikada teslim garantisi
                         </Text>
                     </LinearGradient>
                 </MaskedView>
+                </View>
             </View>
 
-            <CustomButton  title="İlerlemeye devam et" onPress={() => {}} width={'100%'} height={scale(55)} icon={undefined} textSize={scale(16)} />
-            <View style={styles.bottomMenu}>
-            <BottomMenu onTabPress={() => {}} />
-            </View>
+            <CustomButtonEndIcon title="İlerlemeye devam et" onPress={handleNext} width={'100%'} height={scale(55)} icon={require('../../assets/images/icons/transaction/arrowRight.png')} textSize={scale(16)} />
+        </View>
+        <BottomMenu onTabPress={() => {}} />
         </View>
     );
 };
@@ -109,11 +160,14 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: scale(16),
         backgroundColor: '#F5F5F5',
+        justifyContent: 'space-between',
     },
     title: {
         fontSize: scale(24),
         fontWeight: 'bold',
         marginBottom: scale(24),
+        marginTop: scale(24),
+        marginLeft: scale(8),
     },
     label: {
         fontSize: scale(14),
@@ -148,19 +202,20 @@ const styles = StyleSheet.create({
         textAlign: 'right',
     },
     rateContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: '#57b03cad',
         padding: scale(12),
         borderRadius: scale(15),
         marginVertical: scale(8),
         height: scale(50),
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
     },
     rateText: {
         color: '#000',
         fontWeight: '500',
         fontSize: scale(16),
-        textAlign: 'left',
-        marginLeft: scale(10),
+        marginLeft: scale(5),
     },
     infoContainer: {
         marginTop: scale(8),
@@ -168,16 +223,10 @@ const styles = StyleSheet.create({
         gap: scale(4),
     },
     infoText: {
+        marginLeft: scale(3),
         fontSize: scale(16),
         lineHeight: scale(22),
-        marginLeft: scale(10),
         fontWeight: '600',
-    },
-    bottomMenu: {
-        position: 'absolute',
-        bottom: scale(16),
-        left: scale(16),
-        right: scale(16),
     },
     dropdownIcon: {
         width: scale(24),

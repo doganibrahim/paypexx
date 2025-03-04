@@ -14,6 +14,7 @@ import RegisterScreen from '../screens/register/RegisterScreen';
 import RegisterVerificationScreen from '../screens/register/RegisterVerificationScreen';
 import ChoosePasswordScreen from '../screens/register/ChoosePasswordScreen';
 import RegisterPersonalInformationsScreen from '../screens/register/RegisterPersonalInformationsScreen';
+import PhoneCodeScreen from '../screens/register/PhoneCodeScreen';
 import RegisterLocationInformationsScreen from '../screens/register/RegisterLocationInformationsScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import SettingsScreen from '../screens/profile/SettingsScreen';
@@ -27,7 +28,21 @@ import RequestSupport from '../screens/profile/RequestSupport';
 import ProfileIcon from '../components/ProfileIcon';
 import TransactionDetails from '../screens/transaction/TransactionDetails';
 import NewTransaction from '../screens/transaction/NewTransaction';
-
+import SenderCurrencyScreen from '../screens/transaction/SenderCurrencyScreen';
+import ReceiverCurrencyScreen from '../screens/transaction/ReceiverCurrencyScreen';
+import NewTransactionReceiver from '../screens/transaction/NewTransactionReceiver';
+import NewTransactionInformations from '../screens/transaction/NewTransactionInformations';
+import NewTransactionInformations2 from '../screens/transaction/NewTransactionInformations2';
+import NewTransactionInformations3 from '../screens/transaction/NewTransactionInformations3';
+import NewTransactionReview from '../screens/transaction/NewTransactionReview';
+import TransactionPurpose from '../screens/transaction/TransactionPurpose';
+import TransactionPaymentMethod from '../screens/transaction/TransactionPaymentMethod';
+import TransactionFinish from '../screens/transaction/TransactionFinish';
+import TransactionFinish2 from '../screens/transaction/TransactionFinish2';
+import TransactionFinish3 from '../screens/transaction/TransactionFinish3';
+import PaymentApproved from '../screens/transaction/PaymentApproved';
+import RequestReceived from '../screens/transaction/RequestReceived';
+import PaymentDeclined from '../screens/transaction/PaymentDeclined';
 const Stack = createStackNavigator();
 
 const AppNavigator = ({ navigation }) => {
@@ -135,6 +150,13 @@ const AppNavigator = ({ navigation }) => {
                 }}
             />
             <Stack.Screen
+                name="PhoneCode"
+                component={PhoneCodeScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen
                 name="RegisterLocationInformations"
                 component={RegisterLocationInformationsScreen}
                 options={{
@@ -218,6 +240,105 @@ const AppNavigator = ({ navigation }) => {
             <Stack.Screen
                 name="NewTransaction"
                 component={NewTransaction}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen
+                name="SenderCurrency"
+                component={SenderCurrencyScreen}
+            />
+            <Stack.Screen
+                name="ReceiverCurrency"
+                component={ReceiverCurrencyScreen}
+            />
+            <Stack.Screen
+                name="NewTransactionReceiver"
+                component={NewTransactionReceiver}
+                options={{
+                    title: 'Transfer bilgileri',
+                }}
+            />
+            <Stack.Screen
+                name="NewTransactionInformations"
+                component={NewTransactionInformations}
+                options={{
+                    title: 'Transfer bilgileri',
+                }}
+            />
+            <Stack.Screen
+                name="NewTransactionInformations2"
+                component={NewTransactionInformations2}
+                options={{
+                    title: 'Transfer bilgileri',
+                }}
+            />
+            <Stack.Screen
+                name="NewTransactionInformations3"
+                component={NewTransactionInformations3}
+                options={{
+                    title: 'Transfer bilgileri',
+                }}
+            />
+            <Stack.Screen
+                name="NewTransactionReview"
+                component={NewTransactionReview}
+                options={{
+                    title: 'Bilgileri inceleyin',
+                }}
+            />
+            <Stack.Screen
+                name="TransactionPurpose"
+                component={TransactionPurpose}
+                options={{
+                    title: 'Transfer Amacı',
+                }}
+            />
+            <Stack.Screen
+                name="TransactionPaymentMethod"
+                component={TransactionPaymentMethod}
+                options={{
+                    title: 'Bilgileri inceleyin',
+                }}
+            />
+            <Stack.Screen
+                name="TransactionFinish"
+                component={TransactionFinish}
+                options={{
+                    title: 'Bilgileri inceleyin',
+                }}
+            />
+            <Stack.Screen
+                name="TransactionFinish2"
+                component={TransactionFinish2}
+                options={{
+                    title: 'Bilgileri inceleyin',
+                }}
+            />
+            <Stack.Screen
+                name="TransactionFinish3"
+                component={TransactionFinish3}
+                options={{
+                    title: 'Bilgileri inceleyin',
+                }}
+            />
+            <Stack.Screen
+                name="PaymentApproved"
+                component={PaymentApproved}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen
+                name="RequestReceived"
+                component={RequestReceived}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen
+                name="PaymentDeclined"
+                component={PaymentDeclined}
                 options={{
                     headerShown: false
                 }}

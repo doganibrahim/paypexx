@@ -1,16 +1,46 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity, TextInput, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import PhoneInput from 'react-native-phone-number-input';
+import { RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../navigation/types';
+import { Country } from '../../constants/phoneCodes';
 
-const RegisterPersonalInformationsScreen = ({navigation}) => {
+type Props = {
+    route: RouteProp<RootStackParamList, 'RegisterPersonalInformations'>;
+    navigation: any;
+};
+
+const RegisterPersonalInformationsScreen = ({ route, navigation }: Props) => {
     const goRegisterLocationInformations = () => {
         navigation.navigate('RegisterLocationInformations');
     }
 
     const [phoneNumber, setPhoneNumber] = useState('');
-    const phoneInput = useRef(null);
+    const [selectedCountry, setSelectedCountry] = useState<{
+        flag: string;
+        code: string;
+        country?: string;
+    }>({
+        flag: require('../../assets/images/flags/tr.png'),
+        code: '+90',
+        country: 'Turkey'
+    });
+
+    React.useEffect(() => {
+        if (route.params?.selectedCountry) {
+            const country = route.params.selectedCountry;
+            setSelectedCountry({
+                flag: country.flag,
+                code: country.phoneCode,
+                country: country.country
+            });
+        }
+    }, [route.params?.selectedCountry]);
+
+    const handleCountryPress = () => {
+        navigation.navigate('PhoneCode');
+    }
 
     return (
         <KeyboardAvoidingView
@@ -39,50 +69,50 @@ const RegisterPersonalInformationsScreen = ({navigation}) => {
 
                 <View style={{marginBottom: 20}}>
                     <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Telefon Numaranız</Text>
-                    <PhoneInput
-                        ref={phoneInput}
-                        defaultValue={phoneNumber}
-                        defaultCode="TR"
-                        layout="first"
-                        onChangeText={(text) => {
-                            setPhoneNumber(text);
-                        }}
-                        onChangeCountry={(country) => {
-                            const number = phoneNumber.replace(/^\+\d+/, ''); // Mevcut kodu kaldır
-                            setPhoneNumber(`+${country.callingCode[0]}${number}`);
-                        }}
-                        countryPickerProps={{
-                            withFilter: true,
-                            withFlag: true,
-                            withCountryNameButton: true,
-                            withAlphaFilter: false,
-                            withCallingCode: true,
-                            withEmoji: true,
-                            containerButtonStyle: {
-                                backgroundColor: '#f2f2f2',
-                                borderRadius: 15,
-                            }
-                        }}
-                        containerStyle={{
-                            width: '100%',
-                            borderRadius: 15,
-                            backgroundColor: '#f2f2f2',
-                            borderWidth: 1,
-                            borderColor: '#d1d1d1',
-                            height: 55,
-                        }}
-                        textContainerStyle={{
-                            backgroundColor: '#f2f2f2',
-                            height: 50,
-                            paddingVertical: 0,
-                            borderRadius: 15,
-                        }}
-                        textInputStyle={{
-                            height: 50,
-                            fontSize: 16,
-                        }}
-                        placeholder="Telefon numaranız"
-                    />
+                    <View style={{
+                        width: '100%',
+                        height: 55,
+                        backgroundColor: '#f2f2f2',
+                        borderRadius: 15,
+                        borderWidth: 1,
+                        borderColor: '#d1d1d1',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingHorizontal: 15
+                    }}>
+                        <TouchableOpacity 
+                            onPress={handleCountryPress}
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                paddingRight: 10,
+                                borderRightWidth: 1,
+                                borderRightColor: '#d1d1d1',
+                                marginRight: 10
+                            }}
+                        >
+                            <Image 
+                                source={selectedCountry.flag} 
+                                style={{width: 24, height: 24, marginRight: 8, borderRadius: 5}} 
+                            />
+                            <Image source={require('../../assets/images/icons/dropDown.png')} style={{width: 24, height: 24, marginRight: 8}} />
+                            <Text style={[styles.mediumText, {fontSize: 16}]}>{selectedCountry.code}</Text>
+                        </TouchableOpacity>
+                        <TextInput
+                            value={phoneNumber}
+                            onChangeText={setPhoneNumber}
+                            placeholder="Telefon numaranız"
+                            placeholderTextColor="#999"
+                            style={[styles.mediumText, {
+                                flex: 1,
+                                fontSize: 16,
+                                color: '#000',
+                                height: '100%',
+                                padding: 0
+                            }]}
+                            keyboardType="phone-pad"
+                        />
+                    </View>
                 </View>
 
                 <View>
