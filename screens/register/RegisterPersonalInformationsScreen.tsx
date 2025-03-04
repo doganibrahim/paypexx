@@ -26,6 +26,7 @@ const RegisterPersonalInformationsScreen = ({ route, navigation }: Props) => {
         code: '+90',
         country: 'Turkey'
     });
+    const [birthDate, setBirthDate] = useState('');
 
     React.useEffect(() => {
         if (route.params?.selectedCountry) {
@@ -41,6 +42,24 @@ const RegisterPersonalInformationsScreen = ({ route, navigation }: Props) => {
     const handleCountryPress = () => {
         navigation.navigate('PhoneCode');
     }
+
+    const formatBirthDate = (text: string) => {
+        // Sadece rakamları al
+        const numbers = text.replace(/[^\d]/g, '');
+        
+        // Formatı uygula (GG/AA/YYYY)
+        let formatted = '';
+        if (numbers.length > 0) formatted += numbers.substring(0, 2);
+        if (numbers.length > 2) formatted += '/' + numbers.substring(2, 4);
+        if (numbers.length > 4) formatted += '/' + numbers.substring(4, 8);
+        
+        return formatted;
+    };
+
+    const handleBirthDateChange = (text: string) => {
+        const formatted = formatBirthDate(text);
+        setBirthDate(formatted);
+    };
 
     return (
         <KeyboardAvoidingView
@@ -64,7 +83,14 @@ const RegisterPersonalInformationsScreen = ({ route, navigation }: Props) => {
 
                 <View style={{marginBottom: 15}}>
                     <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Doğum Tarihiniz</Text>
-                    <CustomInput logo={undefined} placeholder="GG.AA.YYYY" value={undefined} onChangeText={undefined} />
+                    <CustomInput 
+                        logo={undefined} 
+                        placeholder="GG/AA/YYYY" 
+                        value={birthDate}
+                        onChangeText={handleBirthDateChange}
+                        keyboardType="numeric"
+                        maxLength={10}
+                    />
                 </View>
 
                 <View style={{marginBottom: 20}}>

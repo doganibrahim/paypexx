@@ -1,14 +1,19 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TextInput, TouchableOpacity } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import PhoneInput from 'react-native-phone-number-input';
+import { Country } from 'react-native-phone-number-input';
+import { Country as CountryType } from '../../constants/phoneCodes';
+import countries from '../../constants/countries';
 
 const SettingsScreen = ({navigation}) => {
   const phoneInput = useRef<any>(null);
-  const goEditSettings = () => {
-    navigation.navigate('EditSettings');
-  }
+  const [selectedCountry] = useState<Country>({
+    flag: require('../../assets/images/flags/tr.png'),
+    country: 'Turkey',
+    phoneCode: '+90'
+  });
 
   const [formData, setFormData] = useState({
     name: '',
@@ -69,59 +74,78 @@ const SettingsScreen = ({navigation}) => {
       id: 'phone',
       label: 'Telefon Numarası',
       component: (
-        <PhoneInput
-          ref={phoneInput}
-          defaultValue={formData.phone}
-          defaultCode="TR"
-          layout="first"
-          disabled={true}
-          countryPickerProps={{
-            withFilter: true,
-            withFlag: true,
-            withCountryNameButton: true,
-            withAlphaFilter: false,
-            withCallingCode: true,
-            withEmoji: true,
-            containerButtonStyle: {
-              backgroundColor: '#f2f2f2',
-              borderRadius: 15,
-            }
-          }}
-          containerStyle={{
-            width: '100%',
-            borderRadius: 15,
-            backgroundColor: '#f2f2f2',
-            borderWidth: 1,
-            borderColor: '#d1d1d1',
-            height: 55,
-          }}
-          textContainerStyle={{
-            backgroundColor: '#f2f2f2',
-            height: 50,
-            paddingVertical: 0,
-            borderRadius: 15,
-          }}
-          textInputStyle={{
-            height: 50,
-            fontSize: 16,
-          }}
-          placeholder="Telefon numaranız"
-          onChangeText={undefined}
-        />
+        <View style={{
+          width: '100%',
+          height: 55,
+          backgroundColor: '#f2f2f2',
+          borderRadius: 15,
+          borderWidth: 1,
+          borderColor: '#d1d1d1',
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 15
+        }}>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingRight: 10,
+            borderRightWidth: 1,
+            borderRightColor: '#d1d1d1',
+            marginRight: 10
+          }}>
+            <Image 
+              source={typeof selectedCountry.flag === 'string' 
+                ? { uri: selectedCountry.flag } 
+                : selectedCountry.flag
+              } 
+              style={{width: 24, height: 24, marginRight: 8, borderRadius: 5}} 
+            />
+            <Image source={require('../../assets/images/icons/dropDown.png')} style={{width: 24, height: 24, marginRight: 8}} />
+            <Text style={{fontWeight: '500', fontSize: 16}}>{selectedCountry.phoneCode}</Text>
+          </View>
+          <TextInput
+            value={formData.phone}
+            editable={false}
+            placeholder="Telefon numaranız"
+            placeholderTextColor="#999"
+            style={{
+              flex: 1,
+              fontSize: 16,
+              fontWeight: '500',
+              color: '#000',
+              height: '100%',
+              padding: 0
+            }}
+          />
+        </View>
       )
     },
     {
       id: 'country',
       label: 'İkamet Ettiğiniz Ülke',
       component: (
-        <CustomInput
-          style={{height: 40, width: '100%'}}
-          value={formData.country}
-          editable={false}
-          logo={undefined}
-          placeholder={undefined}
-          onChangeText={undefined}
-        />
+        <View style={{
+          height: 55,
+          borderRadius: 15,
+          paddingHorizontal: 15,
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderWidth: 1,
+          borderColor: '#d1d1d1',
+          backgroundColor: '#f2f2f2',
+        }}>
+          <View style={{width: 24, height: 24, marginRight: 10}}>
+            <Image 
+              source={require('../../assets/images/flags/tr.png')} 
+              style={{width: '100%', height: '100%', borderRadius: 5}} 
+            />
+          </View>
+          <Text style={{flex: 1, marginLeft: 10}}>{formData.country}</Text>
+          <Image 
+            source={require('../../assets/images/icons/dropDown.png')} 
+            style={{width: 24, height: 24}} 
+          />
+        </View>
       )
     },
     {
@@ -190,6 +214,10 @@ const SettingsScreen = ({navigation}) => {
       {item.component}
     </View>
   );
+
+  const goEditSettings = () => {
+    navigation.navigate('EditSettings');
+  }
 
   return (
     <View style={styles.container}>

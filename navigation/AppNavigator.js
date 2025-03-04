@@ -43,6 +43,9 @@ import TransactionFinish3 from '../screens/transaction/TransactionFinish3';
 import PaymentApproved from '../screens/transaction/PaymentApproved';
 import RequestReceived from '../screens/transaction/RequestReceived';
 import PaymentDeclined from '../screens/transaction/PaymentDeclined';
+import AddCard from '../screens/profile/AddCard';
+import EditPhoneScreen from '../screens/profile/EditPhoneScreen';
+import EditCountryScreen from '../screens/profile/EditCountryScreen';
 const Stack = createStackNavigator();
 
 const AppNavigator = ({ navigation }) => {
@@ -342,6 +345,24 @@ const AppNavigator = ({ navigation }) => {
                 options={{
                     headerShown: false
                 }}
+            />
+            <Stack.Screen
+                name="AddCard"
+                component={AddCard}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen
+                name="EditPhone"
+                component={EditPhoneScreen}
+                options={{
+                    title: 'Telefon Numarası',
+                }}
+            />
+            <Stack.Screen
+                name="EditCountry"
+                component={EditCountryScreen}
             />
         </Stack.Navigator>
     );

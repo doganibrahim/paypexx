@@ -139,9 +139,9 @@ const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
                                     keyboardType="numeric"
                                     maxLength={19} // 16 rakam + 3 boşluk
                                 />
-                                <View style={{flexDirection: 'row', gap: 1, alignSelf: 'flex-end'}}>
-                                    <Image source={require('../../assets/images/icons/transaction/Mastercard.png')} style={{width: 32, height: 32}}/>
-                                    <Image source={require('../../assets/images/icons/transaction/Visa.png')} style={{width: 32, height: 32}}/>
+                                <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
+                                    <Image source={require('../../assets/images/icons/transaction/Mastercard.png')} style={{width: 34, height: 32}}/>
+                                    <Image source={require('../../assets/images/icons/transaction/Visa.png')} style={{width: 34, height: 32}}/>
                                 </View>
                             </View>
                         </View>

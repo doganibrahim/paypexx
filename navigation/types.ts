@@ -22,11 +22,19 @@ export type RootStackParamList = {
         onSelect?: (country: any) => void;
     };
     Settings: undefined;
-    EditSettings: undefined;
+    EditSettings: {
+        selectedCountry?: Country;
+    };
+    EditCountry: {
+        onSelect?: (country: any) => void;
+    };
     ChangePassword: undefined;
     DataSecurityAndPrivacy: undefined;
     AccountVerify: undefined;
     SavedCards: undefined;
+    AddCard: {
+        onCardAdd?: (card: CardData) => void;
+    };
     RequestSupport: undefined;
     NewTransaction: undefined;
     ReceiverCurrency: undefined;
@@ -42,4 +50,5 @@ export type RootStackParamList = {
     NewTransactionReview: {
         purpose?: string;
     };
+    EditPhone: undefined;
 }; 

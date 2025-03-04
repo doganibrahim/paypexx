@@ -109,6 +109,7 @@ const OnboardingScreen = ({navigation}) => {
                     onPress={goLoginScreen}
                     width={150}
                     height={45}
+                    icon={null}
                 />
                 <CustomButton
                     title='Üye Ol'
@@ -116,6 +117,7 @@ const OnboardingScreen = ({navigation}) => {
                     width={150}
                     height={45}
                     onPress={goRegisterScreen}
+                    icon={null}
                 />
             </View>
         </View>

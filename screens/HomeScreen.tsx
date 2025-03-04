@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import BottomMenu from '../components/BottomMenu';
 import { useNavigation } from '@react-navigation/native';
@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get('window');
 
 // Dinamik ölçüler için yardımcı fonksiyon
-const scale = (size: number) => (width / 375) * size; // 375 iPhone 6/7/8 genişliği baz alınarak
+const scale = (size: number) => (width / 375) * size;
 
 interface Transaction {
     name: string;
@@ -34,6 +34,7 @@ const HomeScreen = () => {
     const [showNotification2, setShowNotification2] = useState(true);
     const [showReferral, setShowReferral] = useState(true);
     const [activeTab, setActiveTab] = useState<'home' | 'transfer'>('home');
+    const [searchQuery, setSearchQuery] = useState('');
 
     const transactions: Transaction[] = [
         {
@@ -54,130 +55,158 @@ const HomeScreen = () => {
         }
     ];
 
+    // Filtrelenmiş işlemleri hesapla
+    const filteredTransactions = transactions.filter(transaction => 
+        transaction.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        formatDate(transaction.date).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        transaction.amount.toString().includes(searchQuery) ||
+        transaction.status.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     const handleTabPress = (tab: 'home' | 'transfer') => {
         setActiveTab(tab);
     };
 
     return (
-        <View style={styles.container}>
-            {/* Üst Kartlar */}
-            <View style={styles.cardsContainer}>
-                <LinearGradient
-                    colors={['#1A83B9', '#57B03C']}
-                    start={{ x: 0, y: 0.5 }}
-                    end={{ x: 1, y: 0.5 }}
-                    style={styles.welcomeCard}
-                >
-                    <View>
-                    <Text style={[styles.welcomeText, { color: '#fff' }]}>
-                        Hoşgeldiniz, <Text style={[styles.nameText, { color: '#fff' }]}>Eren Demir 👋</Text> 
-                    </Text>
-                    <Text style={[styles.welcomeSubtext, { color: '#fff' }]}>
-                        Ailenize ve sevdiklerinize para{'\n'}göndermenin hızlı ve pratik yolu
-                    </Text>
-                    </View>
-                </LinearGradient>
-
-                {showReferral && (
+        <KeyboardAvoidingView 
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        >
+            <ScrollView 
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContent}
+            >
+                {/* Üst Kartlar */}
+                <View style={styles.cardsContainer}>
                     <LinearGradient
                         colors={['#1A83B9', '#57B03C']}
                         start={{ x: 0, y: 0.5 }}
                         end={{ x: 1, y: 0.5 }}
-                        style={styles.referralCard}
+                        style={styles.welcomeCard}
                     >
-                        <View style={styles.giftIconContainer}>
-                            <Image 
-                                source={require('../assets/images/icons/home/gift.png')} 
-                                style={styles.giftIcon} 
-                            />
+                        <View>
+                        <Text style={[styles.welcomeText, { color: '#fff' }]}>
+                            Hoşgeldiniz, <Text style={[styles.nameText, { color: '#fff' }]}>Eren Demir 👋</Text> 
+                        </Text>
+                        <Text style={[styles.welcomeSubtext, { color: '#fff' }]}>
+                            Ailenize ve sevdiklerinize para{'\n'}göndermenin hızlı ve pratik yolu
+                        </Text>
                         </View>
-                        <View style={styles.referralTextContainer}>
-                            <Text style={[styles.referralText, { color: '#fff' }]}>
-                                Arkadaşınıza tavsiye edin ve 70 pound kazanın!
-                            </Text>
-                        </View>
-                        <TouchableOpacity 
-                            style={styles.notificationCloseButton}
-                            onPress={() => setShowReferral(false)}
-                        >
-                            <Text style={[styles.closeButtonText, { color: '#fff' }]}>×</Text>
-                        </TouchableOpacity>
                     </LinearGradient>
-                )}
 
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', gap:scale(8)}}>
-                    {showNotification1 && (
+                    {showReferral && (
                         <LinearGradient
                             colors={['#1A83B9', '#57B03C']}
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 1, y: 0.5 }}
-                            style={[styles.notificationCard, {flex: 1}]}
+                            style={styles.referralCard}
                         >
+                            <View style={styles.giftIconContainer}>
+                                <Image 
+                                    source={require('../assets/images/icons/home/gift.png')} 
+                                    style={styles.giftIcon} 
+                                />
+                            </View>
+                            <View style={styles.referralTextContainer}>
+                                <Text style={[styles.referralText, { color: '#fff' }]}>
+                                    Arkadaşınıza tavsiye edin ve 70 pound kazanın!
+                                </Text>
+                            </View>
                             <TouchableOpacity 
                                 style={styles.notificationCloseButton}
-                                onPress={() => setShowNotification1(false)}
+                                onPress={() => setShowReferral(false)}
                             >
                                 <Text style={[styles.closeButtonText, { color: '#fff' }]}>×</Text>
                             </TouchableOpacity>
-                            <Image 
-                                source={require('../assets/images/icons/home/bell.png')} 
-                                style={styles.bellIcon} 
-                            />
-                            <Text style={[styles.notificationText, { color: '#fff' }]}>
-                                Bildirimlerini açarak güncellemelerden anında bilgi alın
-                            </Text>
                         </LinearGradient>
                     )}
-                    {showNotification2 && (
-                        <LinearGradient
-                            colors={['#1A83B9', '#57B03C']}
-                            start={{ x: 0, y: 0.5 }}
-                            end={{ x: 1, y: 0.5 }}
-                            style={[styles.notificationCard, {flex: 1}]}
-                        >
-                            <TouchableOpacity 
-                                style={styles.notificationCloseButton}
-                                onPress={() => setShowNotification2(false)}
+
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', gap:scale(8)}}>
+                        {showNotification1 && (
+                            <LinearGradient
+                                colors={['#1A83B9', '#57B03C']}
+                                start={{ x: 0, y: 0.5 }}
+                                end={{ x: 1, y: 0.5 }}
+                                style={[styles.notificationCard, {flex: 1}]}
                             >
-                                <Text style={[styles.closeButtonText, { color: '#fff' }]}>×</Text>
+                                <TouchableOpacity 
+                                    style={styles.notificationCloseButton}
+                                    onPress={() => setShowNotification1(false)}
+                                >
+                                    <Text style={[styles.closeButtonText, { color: '#fff' }]}>×</Text>
+                                </TouchableOpacity>
+                                <Image 
+                                    source={require('../assets/images/icons/home/bell.png')} 
+                                    style={styles.bellIcon} 
+                                />
+                                <Text style={[styles.notificationText, { color: '#fff' }]}>
+                                    Bildirimlerini açarak güncellemelerden anında bilgi alın
+                                </Text>
+                            </LinearGradient>
+                        )}
+                        {showNotification2 && (
+                            <LinearGradient
+                                colors={['#1A83B9', '#57B03C']}
+                                start={{ x: 0, y: 0.5 }}
+                                end={{ x: 1, y: 0.5 }}
+                                style={[styles.notificationCard, {flex: 1}]}
+                            >
+                                <TouchableOpacity 
+                                    style={styles.notificationCloseButton}
+                                    onPress={() => setShowNotification2(false)}
+                                >
+                                    <Text style={[styles.closeButtonText, { color: '#fff' }]}>×</Text>
+                                </TouchableOpacity>
+                                <Image 
+                                    source={require('../assets/images/icons/home/personalCard.png')} 
+                                    style={[styles.bellIcon, { tintColor: '#fff' }]} 
+                                />
+                                <Text style={[styles.notificationText, { color: '#fff' }]}>
+                                    Günlük limitinizi artırmak için kimlik doğrulaması yapın
+                                </Text>
+                            </LinearGradient>
+                        )}
+                    </View>
+                </View>
+
+                {/* Arama Çubuğu */}
+                <LinearGradient
+                    colors={['#1A83B9', '#57B03C']}
+                    start={{ x: 0, y: 0.5 }}
+                    end={{ x: 1, y: 0.5 }}
+                    style={styles.searchBorder}
+                >
+                    <View style={styles.searchContainer}>
+                        <Image 
+                            source={require('../assets/images/icons/home/search.png')} 
+                            style={styles.searchIcon} 
+                        />
+                        <TextInput
+                            style={styles.searchInput}
+                            placeholder="İsim, tarih veya tutara göre ara"
+                            placeholderTextColor="#999"
+                            value={searchQuery}
+                            onChangeText={setSearchQuery}
+                        />
+                        {searchQuery !== '' && (
+                            <TouchableOpacity 
+                                onPress={() => setSearchQuery('')}
+                                style={styles.clearButton}
+                            >
+                                <Text style={styles.clearButtonText}>×</Text>
                             </TouchableOpacity>
-                            <Image 
-                                source={require('../assets/images/icons/home/personalCard.png')} 
-                                style={[styles.bellIcon, { tintColor: '#fff' }]} 
-                            />
-                            <Text style={[styles.notificationText, { color: '#fff' }]}>
-                                Günlük limitinizi artırmak için kimlik doğrulaması yapın
-                            </Text>
-                        </LinearGradient>
-                    )}
-                </View>
-            </View>
+                        )}
+                    </View>
+                </LinearGradient>
 
-            {/* Arama Çubuğu */}
-            <LinearGradient
-                colors={['#1A83B9', '#57B03C']}
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 1, y: 0.5 }}
-                style={styles.searchBorder}
-            >
-                <View style={styles.searchContainer}>
-                    <Image 
-                        source={require('../assets/images/icons/home/search.png')} 
-                        style={styles.searchIcon} 
-                    />
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Arama"
-                        placeholderTextColor="#999"
-                    />
-                </View>
-            </LinearGradient>
-
-            {/* İşlem Geçmişi */}
-            <View style={styles.transactionsContainer}>
-                <Text style={styles.sectionTitle}>İşlem Geçmişi</Text>
-                <ScrollView>
-                    {transactions.map((transaction, index) => (
+                {/* İşlem Geçmişi */}
+                <View style={styles.transactionsContainer}>
+                    <Text style={styles.sectionTitle}>
+                        İşlem Geçmişi 
+                        {searchQuery !== '' && ` (${filteredTransactions.length} sonuç)`}
+                    </Text>
+                    {filteredTransactions.map((transaction, index) => (
                         <TouchableOpacity 
                             key={index} 
                             style={styles.transactionItem}
@@ -201,12 +230,15 @@ const HomeScreen = () => {
                             </View>
                         </TouchableOpacity>
                     ))}
-                </ScrollView>
-            </View>
-            <BottomMenu 
-                onTabPress={handleTabPress}
-            />
-        </View>
+                    {filteredTransactions.length === 0 && (
+                        <Text style={styles.noResultText}>
+                            Aramanızla eşleşen işlem bulunamadı
+                        </Text>
+                    )}
+                </View>
+            </ScrollView>
+            <BottomMenu onTabPress={handleTabPress} />
+        </KeyboardAvoidingView>
     );
 };
 
@@ -214,7 +246,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5F5F5',
+    },
+    scrollContent: {
         padding: scale(16),
+        paddingBottom: scale(80), // BottomMenu için ekstra padding
     },
     cardsContainer: {
         gap: scale(12),
@@ -330,6 +365,7 @@ const styles = StyleSheet.create({
     },
     transactionsContainer: {
         flex: 1,
+        marginBottom: scale(16),
     },
     sectionTitle: {
         fontSize: scale(16),
@@ -393,6 +429,19 @@ const styles = StyleSheet.create({
         fontSize: scale(16),
         color: '#333',
         fontWeight: '500',
+    },
+    clearButton: {
+        padding: scale(4),
+    },
+    clearButtonText: {
+        fontSize: scale(20),
+        color: '#999',
+    },
+    noResultText: {
+        textAlign: 'center',
+        marginTop: scale(20),
+        color: '#666',
+        fontSize: scale(14),
     },
 });
 

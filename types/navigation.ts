@@ -1,3 +1,4 @@
+import { Country } from '../constants/countries';
 import { Currency } from '../constants/receiverCurrencies';
 
 export type RootStackParamList = {

@@ -1,10 +1,27 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, ImageSourcePropType } from 'react-native';
 import { languages } from '../constants/languages';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const LanguageScreen = ({ route, navigation }) => {
-    const [selectedLanguage, setSelectedLanguage] = useState('TR');
+interface Language {
+    name: string;
+    code: string;
+    flag: ImageSourcePropType;
+}
+
+type RouteParams = {
+    setSelectedLanguage?: (code: string) => void;
+}
+
+type Props = {
+    route: RouteProp<Record<string, RouteParams>, string>;
+    navigation: NativeStackNavigationProp<any>;
+}
+
+const LanguageScreen: React.FC<Props> = ({ route, navigation }) => {
+    const [selectedLanguage, setSelectedLanguage] = useState<string>('TR');
 
     useEffect(() => {
         const getInitialLanguage = async () => {
@@ -21,7 +38,7 @@ const LanguageScreen = ({ route, navigation }) => {
         getInitialLanguage();
     }, []);
 
-    const handleLanguageSelect = async (language) => {
+    const handleLanguageSelect = async (language: Language) => {
         await AsyncStorage.setItem('selectedLanguage', language.code);
         setSelectedLanguage(language.code);
         
@@ -36,8 +53,8 @@ const LanguageScreen = ({ route, navigation }) => {
             <Text style={styles.title}>Dilinizi seçin</Text>
             <FlatList
                 data={languages}
-                keyExtractor={(item) => item.name}
-                renderItem={({ item }) => (
+                keyExtractor={(item: Language) => item.name}
+                renderItem={({ item }: { item: Language }) => (
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => handleLanguageSelect(item)}
@@ -104,4 +121,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LanguageScreen;
+export default LanguageScreen; 

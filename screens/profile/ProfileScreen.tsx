@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import SwitchToggle from "react-native-switch-toggle";
+import * as Clipboard from 'expo-clipboard';
+import Toast from '../../components/Toast';
 
 const ProfileScreen = ({ navigation }) => {
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+    const [toastVisible, setToastVisible] = useState(false);
     const userName = 'Eren Demir';
     const userNumber = 'PX000301';
 
@@ -25,6 +28,11 @@ const ProfileScreen = ({ navigation }) => {
         { icon: require('../../assets/images/icons/profile/user-plus.png'), title: 'Arkadaşını Davet Et', hasArrow: true, route: '' },
     ];
 
+    const copyCustomerNumber = async () => {
+        await Clipboard.setStringAsync(userNumber);
+        setToastVisible(true);
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.profileInfo}>
@@ -34,9 +42,9 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={styles.memberNumber}>Müşteri Numarası:</Text>
                 <Text style={styles.memberNumber}>{userNumber}</Text>
                 </View>
-                <View style={styles.copyBtn}>
+                <TouchableOpacity style={styles.copyBtn} onPress={copyCustomerNumber}>
                     <Text style={styles.copyBtnText}>Kopyala</Text>
-                </View>
+                </TouchableOpacity>
                 </View>
             </View>
 
@@ -77,6 +85,12 @@ const ProfileScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 ))}
             </View>
+            
+            <Toast
+                visible={toastVisible}
+                message="Müşteri numarası kopyalandı"
+                onHide={() => setToastVisible(false)}
+            />
         </View>
     );
 };

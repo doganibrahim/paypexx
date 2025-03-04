@@ -12,7 +12,7 @@ const PaymentDeclined = ({navigation}: {navigation: any}) => {
           <View style={styles.middleCircle}>
             <View style={styles.innerCircle}>
               <Image 
-                source={require("../../assets/images/icons/transaction/declined2.png")} 
+                source={require("../../assets/images/icons/transaction/declined.png")} 
                 style={styles.icon} 
                 resizeMode="contain"
               />

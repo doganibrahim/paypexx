@@ -4,7 +4,19 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 
 const ChoosePasswordScreen = ({navigation}) => {
+    const [password, setPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [error, setError] = React.useState('');
+
     const goRegisterPersonalInformations = () => {
+        if (password.length < 6) {
+            setError('Şifreniz en az 6 karakter olmalıdır.');
+            return;
+        }
+        if (password !== confirmPassword) {
+            setError('Şifreler eşleşmiyor.');
+            return;
+        }
         navigation.navigate('RegisterPersonalInformations');
     }
     return (
@@ -19,13 +31,27 @@ const ChoosePasswordScreen = ({navigation}) => {
 
                 <View style={{marginBottom: 15}}>
                     <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Şifrenizi girin</Text>
-                    <CustomInput logo={require('../../assets/images/icons/lock.png')} placeholder="Yeni şifrenizi girin" value={undefined} onChangeText={undefined} />
+                    <CustomInput 
+                        logo={require('../../assets/images/icons/lock.png')} 
+                        placeholder="Yeni şifrenizi girin" 
+                        value={password} 
+                        onChangeText={setPassword}
+                        secureTextEntry={true} 
+                    />
                 </View>
 
                 <View style={{marginBottom: 20}}>
                     <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Şifrenizi tekrar girin</Text>
-                    <CustomInput logo={require('../../assets/images/icons/lock.png')} placeholder="Yeni şifrenizi girin" value={undefined} onChangeText={undefined} />
+                    <CustomInput 
+                        logo={require('../../assets/images/icons/lock.png')} 
+                        placeholder="Yeni şifrenizi girin" 
+                        value={confirmPassword} 
+                        onChangeText={setConfirmPassword}
+                        secureTextEntry={true}
+                    />
                 </View>
+
+                {error ? <Text style={[styles.lightText, {color: 'red', marginBottom: 10, textAlign: 'center'}]}>{error}</Text> : null}
 
                 <View style={{marginBottom: 10}}>
                     <CustomButton title="Devam et" width={"100%"} height={55} onPress={goRegisterPersonalInformations} icon={undefined} />

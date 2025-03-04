@@ -1,9 +1,9 @@
 import React from 'react';
 import { Image, TouchableOpacity } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const ProfileIcon = () => {
-    const navigation = useNavigation<NavigationProp<any>>();
+    const navigation = useNavigation();
     
     const goProfileScreen = () => {
         navigation.navigate('Profile');

@@ -18,7 +18,9 @@ const RegisterVerificationScreen = ({navigation}) => {
                 </View>
 
                 <View style={{marginBottom: 40}}>
-                    <CustomInput logo={require('../../assets/images/icons/key.png')} placeholder="6 haneli kod" value={undefined} onChangeText={undefined} />
+                    <CustomInput logo={require('../../assets/images/icons/key.png')} placeholder="6 haneli kod" value={undefined} onChangeText={undefined} 
+                        maxLength={6}
+                    />
                     <Text style={[styles.mediumText, {fontSize: 12, lineHeight: 22, textAlign: 'center'}]}>E-posta adresinize gönderilen 6 haneli kodu girin.</Text>
                 </View>
 

@@ -1,11 +1,16 @@
 import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
+import { useState } from 'react';
 
 const RegisterScreen = ({navigation}) => {
     const goRegisterVerification = () => {
         navigation.navigate('RegisterVerification');
     }
+    const goLogin = () => {
+        navigation.navigate('LoginScreen');
+    }
+    const [email, setEmail] = useState<string>('');
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -17,7 +22,13 @@ const RegisterScreen = ({navigation}) => {
                         <Text style={[styles.boldText, styles.centerText, {fontSize: 24, lineHeight: 30}]}>Paypexx'e hoş geldiniz!  Güvenli ve hızlı işlemlerin keyfini çıkarın.</Text>
                     </View>
                     <View style={{marginBottom: 10}}>
-                        <CustomInput logo={require('../../assets/images/icons/mail.png')} placeholder="Email adresinizi girin" />
+                        <CustomInput logo={require('../../assets/images/icons/mail.png')} placeholder="Email adresinizi girin"
+                            value={email}
+                            onChangeText={setEmail}
+                            type="email"
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
                     </View>
                     <View style={{marginBottom: 30}}>
                         <CustomButton
@@ -25,8 +36,9 @@ const RegisterScreen = ({navigation}) => {
                             onPress={goRegisterVerification}
                             width={"100%"}
                             height={55}
+                            icon={null}
                         />
-                        <Text style={[styles.lightText, styles.rightText, {fontSize: 14, lineHeight: 22, marginRight: 10, marginTop: 3}]}>Zaten kayıtlı mısın? <Text style={[styles.mediumText, {color: '#57B03C'}]}>Giriş yap</Text></Text>
+                        <Text style={[styles.lightText, styles.rightText, {fontSize: 14, lineHeight: 22, marginRight: 10, marginTop: 3}]}>Zaten kayıtlı mısın? <Text style={[styles.mediumText, {color: '#57B03C'}]} onPress={goLogin}>Giriş yap</Text></Text>
                     </View>
                 </View>
                 <View style={{marginBottom: 20}}>

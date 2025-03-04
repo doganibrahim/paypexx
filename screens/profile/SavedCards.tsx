@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import CustomInputWhite from '../../components/CustomInputWhite';
 
 interface CardData {
     cardNumber: string;
@@ -8,7 +9,7 @@ interface CardData {
     expiryDate: string;
 }
 
-const SavedCards = () => {
+const SavedCards = ({ navigation }) => {
     const initialCards: CardData[] = [
         {
             cardNumber: '5282345678901289',
@@ -23,22 +24,9 @@ const SavedCards = () => {
     ];
 
     const [cards, setCards] = useState<CardData[]>(initialCards);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [newCard, setNewCard] = useState<CardData>({
-        cardNumber: '',
-        cardHolder: '',
-        expiryDate: ''
-    });
 
-    const handleAddCard = () => {
-        if (!newCard.cardNumber || !newCard.cardHolder || !newCard.expiryDate) {
-            Alert.alert('Hata', 'Lütfen tüm alanları doldurun.');
-            return;
-        }
-
+    const handleAddCard = (newCard: CardData) => {
         setCards([...cards, newCard]);
-        setNewCard({ cardNumber: '', cardHolder: '', expiryDate: '' });
-        setModalVisible(false);
     };
 
     const formatCardNumber = (text: string) => {
@@ -61,121 +49,66 @@ const SavedCards = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-            {cards.map((card, index) => (
-                <View
-                    key={index}
-                    style={[styles.card]}
-                >
-                    <LinearGradient
-                        colors={['#182A77', '#040716']}
-                        style={styles.cardBackground}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 0, y: 1 }}
-                    />
-                    <View style={styles.decorativeCircle}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={styles.scrollView}
+            >
+                {cards.map((card, index) => (
+                    <View
+                        key={index}
+                        style={[styles.card]}
+                    >
                         <LinearGradient
-                            colors={['#0E194D', 'rgba(14, 25, 77, 0.3)']}
-                            style={styles.circleGradient}
+                            colors={['#182A77', '#040716']}
+                            style={styles.cardBackground}
                             start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 1 }}
+                            end={{ x: 0, y: 1 }}
                         />
-                    </View>
-                    <View style={styles.cardContent}>
-                        <View style={styles.cardHeader}>
-                            <View></View>
-                            <Image 
-                                source={require('../../assets/images/icons/profile/mastercardLogo.png')} 
-                                style={styles.mastercardLogo}
+                        <View style={styles.decorativeCircle}>
+                            <LinearGradient
+                                colors={['#0E194D', 'rgba(14, 25, 77, 0.3)']}
+                                style={styles.circleGradient}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 1 }}
                             />
                         </View>
-                        <Text style={styles.cardNumber}>
-                            {formatDisplayCardNumber(card.cardNumber)}
-                        </Text>
-                        <View style={styles.cardBottom}>
-                            <View>
-                                <Text style={styles.cardHolder}>{card.cardHolder}</Text>
+                        <View style={styles.cardContent}>
+                            <View style={styles.cardHeader}>
+                                <View></View>
+                                <Image 
+                                    source={require('../../assets/images/icons/profile/mastercardLogo.png')} 
+                                    style={styles.mastercardLogo}
+                                />
                             </View>
-                            <View>
-                                <Text style={styles.expiryDate}>{card.expiryDate}</Text>
+                            <Text style={styles.cardNumber}>
+                                {formatDisplayCardNumber(card.cardNumber)}
+                            </Text>
+                            <View style={styles.cardBottom}>
+                                <View style={styles.cardHolderContainer}>
+                                    <Text style={styles.cardHolder} numberOfLines={2}>
+                                        {card.cardHolder}
+                                    </Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.expiryDate}>{card.expiryDate}</Text>
+                                </View>
                             </View>
                         </View>
                     </View>
-                </View>
-            ))}
+                ))}
             </ScrollView>
+
             <TouchableOpacity 
-                style={styles.addButton}
-                onPress={() => setModalVisible(true)}
+                style={[styles.addButton]}
+                onPress={() => navigation.navigate('AddCard', {
+                    onCardAdd: handleAddCard
+                })}
             >
                 <View style={styles.addButtonContent}>
-                <Text style={styles.addButtonText}>Kart Ekle</Text>
-                <Image style={styles.addButtonIcon} source={require('../../assets/images/icons/profile/plusCircle.png')}></Image>
+                    <Text style={styles.addButtonText}>Yeni Kart Ekle</Text>
+                    <Image style={styles.addButtonIcon} source={require('../../assets/images/icons/profile/plusCircle.png')}></Image>
                 </View>
             </TouchableOpacity>
-
-            <Modal
-                visible={modalVisible}
-                animationType="slide"
-                transparent={true}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Yeni Kart Ekle</Text>
-                        
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Kart Numarası"
-                            value={newCard.cardNumber}
-                            onChangeText={(text) => {
-                                const formatted = formatCardNumber(text.replace(/\D/g, ''));
-                                setNewCard({...newCard, cardNumber: formatted});
-                            }}
-                            keyboardType="numeric"
-                            maxLength={19}
-                        />
-                        
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Kart Üzerindeki İsim"
-                            value={newCard.cardHolder}
-                            onChangeText={(text) => setNewCard({...newCard, cardHolder: text.toUpperCase()})}
-                            autoCapitalize="characters"
-                        />
-                        
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Son Kullanma Tarihi (AA/YY)"
-                            value={newCard.expiryDate}
-                            onChangeText={(text) => {
-                                const formatted = formatExpiryDate(text);
-                                setNewCard({...newCard, expiryDate: formatted});
-                            }}
-                            keyboardType="numeric"
-                            maxLength={5}
-                        />
-
-                        <View style={styles.modalButtons}>
-                            <TouchableOpacity 
-                                style={[styles.modalButton, styles.cancelButton]}
-                                onPress={() => {
-                                    setModalVisible(false);
-                                    setNewCard({ cardNumber: '', cardHolder: '', expiryDate: '' });
-                                }}
-                            >
-                                <Text style={styles.buttonText}>İptal</Text>
-                            </TouchableOpacity>
-                            
-                            <TouchableOpacity 
-                                style={[styles.modalButton, styles.saveButton]}
-                                onPress={handleAddCard}
-                            >
-                                <Text style={styles.buttonText}>Kaydet</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
         </View>
     );
 };
@@ -183,8 +116,11 @@ const SavedCards = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
         backgroundColor: '#f5f5f5',
+    },
+    scrollView: {
+        flex: 1,
+        padding: 24,
     },
     card: {
         height: 180,
@@ -226,12 +162,20 @@ const styles = StyleSheet.create({
     cardBottom: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
+        minHeight: 50,
+    },
+    cardHolderContainer: {
+        flex: 1,
+        marginRight: 10,
+        justifyContent: 'center',
     },
     cardHolder: {
         color: 'white',
         fontSize: 20,
         textTransform: 'uppercase',
-        fontWeight: 600,
+        fontWeight: '600',
+        flexWrap: 'wrap',
     },
     expiryDate: {
         marginRight: 10,
@@ -244,60 +188,66 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 8,
         alignItems: 'center',
-        marginTop: 16,
+        margin: 24,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     addButtonText: {
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
     },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        padding: 16,
+    formContainer: {
+        backgroundColor: '#F5F5F5',
+        borderRadius: 8,
+        marginTop: 4,
     },
-    modalContent: {
-        backgroundColor: 'white',
-        borderRadius: 12,
-        padding: 16,
+    label: {
+        fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 4,
+        marginLeft: 4,
     },
-    modalTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
+    cardLogos: {
+        flexDirection: 'row',
+        alignSelf: 'flex-end',
+        marginTop: 2,
+    },
+    cardLogo: {
+        width: 34,
+        height: 32,
+    },
+    expiryDateContainer: {
+        flexDirection: 'row',
+        gap: 12,
         marginBottom: 16,
-        textAlign: 'center',
+    },
+    expiryDateInput: {
+        flex: 1,
     },
     input: {
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: 8,
         padding: 12,
-        marginBottom: 16,
         fontSize: 16,
+        backgroundColor: '#fff',
     },
-    modalButtons: {
+    addButtonIcon: {
+        width: 24,
+        height: 24,
+        marginLeft: 8,
+        tintColor: 'white',
+    },
+    addButtonContent: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 8,
-    },
-    modalButton: {
-        flex: 1,
-        padding: 12,
-        borderRadius: 8,
-        marginHorizontal: 8,
-    },
-    cancelButton: {
-        backgroundColor: '#f44336',
-    },
-    saveButton: {
-        backgroundColor: '#57B03C',
-    },
-    buttonText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 16,
-        fontWeight: 'bold',
+        alignItems: 'center',
     },
     decorativeCircle: {
         position: 'absolute',
@@ -312,16 +262,6 @@ const styles = StyleSheet.create({
     circleGradient: {
         width: '100%',
         height: '100%',
-    },
-    addButtonIcon: {
-        width: 24,
-        height: 24,
-        marginLeft: 8,
-        tintColor: 'white',
-    },
-    addButtonContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
     },
 });
 

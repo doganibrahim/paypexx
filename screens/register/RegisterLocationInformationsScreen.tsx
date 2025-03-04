@@ -59,12 +59,12 @@ const RegisterLocationInformationsScreen = ({navigation}) => {
 
                     <View style={{marginBottom: 10}}>
                         <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Ev/Apartman No</Text>
-                        <CustomInput logo={undefined} placeholder="Ev/Apartman numaranızı girin" value={undefined} onChangeText={undefined} />
+                        <CustomInput logo={undefined} placeholder="Ev/Apartman numaranızı girin" value={undefined} onChangeText={undefined} keyboardType="numeric" />
                     </View>
 
                     <View style={{marginBottom: 10}}>
                         <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Posta Kodu</Text>
-                        <CustomInput logo={undefined} placeholder="Posta kodunu girin" value={undefined} onChangeText={undefined} />
+                        <CustomInput logo={undefined} placeholder="Posta kodunu girin" value={undefined} onChangeText={undefined} keyboardType="numeric" />
                     </View>
 
                     <View>

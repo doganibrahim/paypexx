@@ -1,11 +1,14 @@
 import { View, Text, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
+import { useState } from 'react';
 
 const LoginVerification = ({navigation}) => {
     const goHomeScreen = () => {
         navigation.navigate('Home');
     }
+
+    const [code, setCode] = useState<string>('');
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -17,16 +20,26 @@ const LoginVerification = ({navigation}) => {
                 </View>
 
                 <View style={{marginBottom: 40}}>
-                    <CustomInput logo={require('../../assets/images/icons/key.png')} placeholder="6 haneli kod" />
+                    <CustomInput 
+                        logo={require('../../assets/images/icons/key.png')} 
+                        placeholder="6 haneli kod"
+                        value={code}
+                        onChangeText={setCode}
+                        maxLength={6}
+                    />
                     <Text style={[styles.mediumText, {fontSize: 12, lineHeight: 22, textAlign: 'center'}]}>E-posta adresinize gönderilen 6 haneli kodu girin.</Text>
                 </View>
 
                 <View style={{marginBottom: 10}}>
-                    <CustomButton title="Devam Et" width={"100%"} height={55} onPress={goHomeScreen} />
+                    <CustomButton title="Devam Et" width={"100%"} height={55} onPress={goHomeScreen} 
+                        icon={null}
+                    />
                 </View>
 
                 <View style={{marginBottom: 5}}>
-                <CustomButton title="Tekrar kod iste" width={"100%"} height={55} backgroundColor="#1B93D0" onPress={() => {}} />
+                <CustomButton title="Tekrar kod iste" width={"100%"} height={55} backgroundColor="#1B93D0" onPress={() => {}} 
+                    icon={null}
+                />
                 </View>
 
                 <View>

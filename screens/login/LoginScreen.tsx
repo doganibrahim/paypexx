@@ -1,6 +1,7 @@
 import {View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity} from "react-native";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
+import { useState } from "react";
 
 const LoginScreen = ({navigation}) => {
     const goLoginVerification = () => {
@@ -9,6 +10,12 @@ const LoginScreen = ({navigation}) => {
     const goForgotPassword = () => {
         navigation.navigate('ForgotPassword');
     }
+    const goRegister = () => {
+        navigation.navigate('Register');
+    }
+
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     return (
         <KeyboardAvoidingView 
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -21,10 +28,26 @@ const LoginScreen = ({navigation}) => {
                         <Text style={[styles.lightText, styles.centerText, {fontSize: 16, lineHeight: 22}]}>Hızlı ve güvenli işlemin tadını çıkarın.</Text>
                     </View>
                     <View style={{marginBottom: 7}}>
-                        <CustomInput logo={require('../../assets/images/icons/mail.png')} placeholder="Email adresinizi girin" />
+                        <CustomInput 
+                            logo={require('../../assets/images/icons/mail.png')} 
+                            placeholder="Email adresinizi girin"
+                            value={email}
+                            onChangeText={setEmail}
+                            type="email"
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
                     </View>
                     <View style={{marginBottom: 20}}>
-                        <CustomInput logo={require('../../assets/images/icons/lock.png')} placeholder="Şifrenizi girin" />
+                        <CustomInput 
+                            logo={require('../../assets/images/icons/lock.png')} 
+                            placeholder="Şifrenizi girin"
+                            value={password}
+                            onChangeText={setPassword}
+                            type="password"
+                            secureTextEntry
+                            autoCapitalize="none"
+                        />
                         <TouchableOpacity onPress={goForgotPassword}>
                             <Text style={[styles.mediumText, styles.rightText, {fontSize: 14, lineHeight: 22, marginRight: 10, marginTop: 3}]}>Şifremi unuttum</Text>
                         </TouchableOpacity>
@@ -35,8 +58,9 @@ const LoginScreen = ({navigation}) => {
                             onPress={goLoginVerification}
                             width={"100%"}
                             height={55}
+                            icon={null}
                         />
-                        <Text style={[styles.lightText, styles.rightText, {fontSize: 14, lineHeight: 22, marginRight: 10, marginTop: 3}]}>Üyeliğiniz yok mu? <Text style={styles.mediumText}>Üye ol</Text></Text>
+                        <Text style={[styles.lightText, styles.rightText, {fontSize: 14, lineHeight: 22, marginRight: 10, marginTop: 3}]}>Üyeliğiniz yok mu? <Text style={styles.mediumText} onPress={goRegister}>Üye ol</Text></Text>
                     </View>
                 </View>
                 <View style={{marginBottom: 20}}>
