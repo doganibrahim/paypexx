@@ -6,7 +6,7 @@ const ProfileIcon = () => {
     const navigation = useNavigation();
     
     const goProfileScreen = () => {
-        navigation.navigate('Profile');
+        navigation.navigate('Profile' as never);
     }
 
     return (

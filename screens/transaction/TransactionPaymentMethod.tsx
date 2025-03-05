@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, 
 import CustomButton from '../../components/CustomButton';
 import CustomInputWhite from '../../components/CustomInputWhite';
 import BottomMenu from '../../components/BottomMenu';
+import { useCurrency } from '../../context/CurrencyContext';
 
 const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
     const [cardName, setCardName] = useState('');
@@ -10,6 +11,7 @@ const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const { receiverCurrency } = useCurrency();
 
     const formatExpiryDate = (text: string) => {
         // Silme işlemi sırasında "/" karakterini kaldır
@@ -50,8 +52,28 @@ const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
     };
 
     const handlePayment = () => {
-        navigation.navigate('TransactionFinish3');
+        navigation.navigate('PaymentApproved');
     }
+
+    const handleBankTransfer = () => {
+        const specialCountries = [
+            'Ukrayna',
+            'Moldova',
+            'Türkmenistan',
+            'Kazakistan',
+            'Tacikistan',
+            'Azerbaycan',
+            'Gürcistan'
+        ];
+
+        if (specialCountries.includes(receiverCurrency?.country || '')) {
+            navigation.navigate('TransactionFinish2');
+        } else if (receiverCurrency?.country === 'İngiltere') {
+            navigation.navigate('TransactionFinish3');
+        } else {
+            navigation.navigate('TransactionFinish');
+        }
+    };
 
     useEffect(() => {
         const keyboardShowListener = Keyboard.addListener(
@@ -111,7 +133,7 @@ const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
                             />
                             <CustomButton
                                 title="Bank Transfer"
-                                onPress={() => {}}
+                                onPress={handleBankTransfer}
                                 backgroundColor="#fff"
                                 textColor="#000"
                                 width="100%"

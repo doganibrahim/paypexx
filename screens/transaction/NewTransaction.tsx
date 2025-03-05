@@ -86,6 +86,9 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
                     source={require('../../assets/images/icons/transaction/star6.json')}
                     style={{width: scale(28), height: scale(28), marginLeft: scale(10)}}
                     autoPlay
+                    onAnimationFailure={(error) => {
+                        console.log('Animation failed:', error);
+                    }}
                 />
                 <Text style={styles.rateText}>1 TRY = 0.0265 EUR</Text>
             </View>

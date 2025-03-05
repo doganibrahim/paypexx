@@ -48,7 +48,7 @@ import EditPhoneScreen from '../screens/profile/EditPhoneScreen';
 import EditCountryScreen from '../screens/profile/EditCountryScreen';
 const Stack = createStackNavigator();
 
-const AppNavigator = ({ navigation }) => {
+const AppNavigator = () => {
     return (
         <Stack.Navigator initialRouteName="Onboarding" screenOptions={{
             cardStyle: { backgroundColor: '#F5F5F5' },
@@ -169,16 +169,16 @@ const AppNavigator = ({ navigation }) => {
             <Stack.Screen
                 name="Profile"
                 component={ProfileScreen}
-                options={{
+                options={({ navigation }) => ({
                     headerRight: () => 
                     <TouchableOpacity 
                         style={{flexDirection: 'row', alignItems: 'center', marginRight: 15}}
-                        onPress={() => {}}
+                        onPress={() => navigation.navigate('LoginScreen')}
                     >
                         <Image source={require('../assets/images/icons/profile/log-out.png')} style={{width: 22, height: 22}} />
                         <Text style={{color: '#C10000', marginLeft: 9, fontWeight: '400'}}>Çıkış Yap</Text>
                     </TouchableOpacity>
-                }}
+                })}
             />
             <Stack.Screen
                 name="SelectCountry"

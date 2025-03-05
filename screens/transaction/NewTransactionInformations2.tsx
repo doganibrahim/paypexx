@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, 
 import BottomMenu from '../../components/BottomMenu';
 import CustomInput from '../../components/CustomInput';
 import CustomButtonEndIcon from '../../components/EndIconCustomButton';
+import { useCurrency } from '../../context/CurrencyContext';
 
 const NewTransactionInformations2 = ({ navigation }: { navigation: any }) => {
     const [cardNumber, setCardNumber] = useState('');
     const [userName, setUserName] = useState('');
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const { receiverCurrency } = useCurrency();
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -58,10 +60,12 @@ const NewTransactionInformations2 = ({ navigation }: { navigation: any }) => {
                 <View style={styles.box}>
                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
                     <Image 
-                        source={require('../../assets/images/flags/tr.png')} 
+                        source={receiverCurrency?.flag || require('../../assets/images/flags/tr.png')} 
                         style={styles.flag}
                     />
-                    <Text style={styles.currencyCode}>TRY</Text>
+                    <Text style={styles.currencyCode}>
+                        {receiverCurrency?.currency || 'TRY'}
+                    </Text>
                     </View>
                     <Image 
                         source={require('../../assets/images/icons/transaction/dropDown.png')}

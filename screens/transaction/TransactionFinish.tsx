@@ -69,7 +69,7 @@ const TransactionFinish: React.FC<TransactionFinishProps> = ({ navigation, route
         title="Ödemeyi Gerçekleştirdim"
         textSize={16}
         onPress={() => {
-          navigation.navigate("PaymentApproved");
+          navigation.navigate("RequestReceived");
         }}
         width="100%"
         height={55}

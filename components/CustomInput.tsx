@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         height: 54,
         fontSize: 16,
         lineHeight: 22,
-        color: '#a0a0a0',
+        color: '#000',
     }
 });
 

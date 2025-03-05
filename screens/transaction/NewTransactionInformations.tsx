@@ -5,11 +5,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import CustomInput from '../../components/CustomInput';
 import CustomButtonEndIcon from '../../components/EndIconCustomButton';
 import { Platform } from 'react-native';
+import { useCurrency } from '../../context/CurrencyContext';
 
 const NewTransactionInformations = ({ navigation }: { navigation: any }) => {
     const [cardNumber, setCardNumber] = React.useState('');
     const [userName, setUserName] = React.useState('');
     const [isKeyboardVisible, setKeyboardVisible] = React.useState(false);
+    const { receiverCurrency } = useCurrency();
 
     React.useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -59,10 +61,12 @@ const NewTransactionInformations = ({ navigation }: { navigation: any }) => {
                 <View style={styles.box}>
                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
                     <Image 
-                        source={require('../../assets/images/flags/tr.png')} 
+                        source={receiverCurrency?.flag || require('../../assets/images/flags/tr.png')} 
                         style={styles.flag}
                     />
-                    <Text style={styles.currencyCode}>TRY</Text>
+                    <Text style={styles.currencyCode}>
+                        {receiverCurrency?.currency || 'TRY'}
+                    </Text>
                     </View>
                     <Image 
                         source={require('../../assets/images/icons/transaction/dropDown.png')}
