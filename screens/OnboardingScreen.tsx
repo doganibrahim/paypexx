@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
 import Swiper from 'react-native-swiper';
 import CustomButton from "../components/CustomButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -65,7 +65,7 @@ const OnboardingScreen = ({navigation}) => {
                 <View style={styles.slide}>
                     <Image
                         source={require('../assets/images/onboardscreen-1.png')}
-                        style={[styles.image]}
+                        style={styles.image}
                         resizeMode="cover"
                     />
                     <View style={{position: 'absolute', top: height*0.24, left: width*0.05, right: width*0.05}}>
@@ -133,8 +133,6 @@ const styles = StyleSheet.create({
     },
     slide: {
         flex: 1,
-        width,
-        height,
     },
     onboardingHeader: {
         position: 'absolute',

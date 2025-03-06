@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './navigation/AppNavigator';
-import {SafeAreaView, StatusBar, StyleSheet} from "react-native";
+import {View, StatusBar, StyleSheet} from "react-native";
 import { CurrencyProvider } from './context/CurrencyContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const App = () => {
     React.useEffect(() => {
@@ -12,18 +13,20 @@ const App = () => {
         StatusBar.setHidden(false);
     }, []);
     return (
+        <SafeAreaProvider>
         <CurrencyProvider>
-            <SafeAreaView style={styles.container}>
-                <StatusBar 
-                    translucent 
-                    backgroundColor="transparent" 
-                    barStyle="light-content"
-                />
-                <NavigationContainer>
-                    <AppNavigator />
-                </NavigationContainer>
-            </SafeAreaView>
-        </CurrencyProvider>
+                    <View style={styles.container}>
+                        <StatusBar 
+                            translucent 
+                            backgroundColor="transparent" 
+                            barStyle="light-content"
+                        />
+                        <NavigationContainer>
+                            <AppNavigator />
+                        </NavigationContainer>
+                    </View>
+                </CurrencyProvider>
+        </SafeAreaProvider>
     );
 };
 
