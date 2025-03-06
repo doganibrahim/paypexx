@@ -39,7 +39,6 @@ const OnboardingScreen = ({navigation}) => {
     
     return (
         <View style={[styles.container]}>
-            <StatusBar translucent backgroundColor='transparent' />
             <View style={styles.onboardingHeader}>
                 <TouchableOpacity onPress={goLanguageScreen} style={styles.langContainer}>
                     <Image

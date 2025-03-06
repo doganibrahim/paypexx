@@ -5,10 +5,15 @@ import {SafeAreaView, StatusBar, StyleSheet} from "react-native";
 import { CurrencyProvider } from './context/CurrencyContext';
 
 const App = () => {
+    React.useEffect(() => {
+        StatusBar.setBarStyle('light-content');
+        StatusBar.setTranslucent(true);
+        StatusBar.setBackgroundColor('transparent');
+    }, []);
     return (
         <CurrencyProvider>
             <SafeAreaView style={styles.container}>
-                <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
+            <StatusBar translucent backgroundColor='transparent' style="light" />
                 <NavigationContainer>
                     <AppNavigator />
                 </NavigationContainer>

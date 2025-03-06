@@ -64,7 +64,7 @@ const AppNavigator = () => {
                         paddingLeft: 10,
                     },
                     headerRightContainerStyle: {
-                        paddingRight: 18,
+                        paddingRight: 20,
                     }
         }}>
             <Stack.Screen
