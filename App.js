@@ -9,11 +9,16 @@ const App = () => {
         StatusBar.setBarStyle('light-content');
         StatusBar.setTranslucent(true);
         StatusBar.setBackgroundColor('transparent');
+        StatusBar.setHidden(false);
     }, []);
     return (
         <CurrencyProvider>
             <SafeAreaView style={styles.container}>
-            <StatusBar translucent backgroundColor='transparent' style="light" />
+                <StatusBar 
+                    translucent 
+                    backgroundColor="transparent" 
+                    barStyle="light-content"
+                />
                 <NavigationContainer>
                     <AppNavigator />
                 </NavigationContainer>

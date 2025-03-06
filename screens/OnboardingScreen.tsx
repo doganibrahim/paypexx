@@ -39,7 +39,7 @@ const OnboardingScreen = ({navigation}) => {
     
     return (
         <View style={[styles.container]}>
-            <View style={styles.onboardingHeader}>
+            <View style={[styles.onboardingHeader, { marginTop: insets.top }]}>
                 <TouchableOpacity onPress={goLanguageScreen} style={styles.langContainer}>
                     <Image
                         source={getLanguageFlag(selectedLanguage)}
@@ -138,12 +138,12 @@ const styles = StyleSheet.create({
     },
     onboardingHeader: {
         position: 'absolute',
-        top: 10,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         zIndex: 1,
+        paddingHorizontal: 16,
     },
     langContainer: {
         left: width * 0.075,

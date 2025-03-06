@@ -18,7 +18,8 @@
       "requireFullScreen": true,
       "infoPlist": {
         "UIStatusBarStyle": "UIStatusBarStyleLightContent",
-        "UIViewControllerBasedStatusBarAppearance": false
+        "UIViewControllerBasedStatusBarAppearance": false,
+        "UIStatusBarHidden": true
       }
     },
     "android": {
