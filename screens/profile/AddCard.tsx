@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 24,
+        top: 30,
         backgroundColor: '#f5f5f5',
     },
     card: {

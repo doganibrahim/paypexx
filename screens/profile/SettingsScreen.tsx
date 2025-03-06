@@ -245,14 +245,14 @@ const SettingsScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
   },
   formContainer: {
     padding: 16,
   },
   buttonContainer: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
   },
   label: {
     fontSize: 16,

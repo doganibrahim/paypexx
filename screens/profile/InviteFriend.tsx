@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, ToastAndroid, Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Clipboard from 'expo-clipboard';
 import Toast from '../../components/Toast';
@@ -34,11 +33,13 @@ const InviteFriend = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView 
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewContent}
+        bounces={false}
+        overScrollMode="never"
       >
         <View style={styles.content}>
           <View style={styles.headerContainer}>
@@ -90,7 +91,7 @@ const InviteFriend = () => {
         message="Bağlantı kopyalandı!"
         onHide={() => setToastVisible(false)}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
