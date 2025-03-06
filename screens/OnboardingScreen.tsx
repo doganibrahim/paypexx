@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, SafeAreaView} from 'react-native';
 import Swiper from 'react-native-swiper';
 import CustomButton from "../components/CustomButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -36,95 +36,101 @@ const OnboardingScreen = ({navigation}) => {
     }
     
     return (
-        <View style={styles.container}>
-            <View style={styles.onboardingHeader}>
-                <TouchableOpacity onPress={goLanguageScreen} style={styles.langContainer}>
-                    <Image
-                        source={getLanguageFlag(selectedLanguage)}
-                        style={styles.icon}
-                    />
-                    <Text style={[styles.smallText, {color: currentIndex === 0 ? '#FFF' : '#000'}]}>
-                        {selectedLanguage}
-                    </Text>
-                </TouchableOpacity>
-                <Image
-                    source={require('../assets/images/logo.png')}
-                    style={[styles.logo, { right: width * 0.075 }]}
-                />
-            </View>
-            <Swiper
-                loop={false}
-                showsButtons={false}
-                showsPagination={true}
-                onIndexChanged={(index) => setCurrentIndex(index)}
-                dotStyle={styles.dot}
-                activeDotStyle={styles.activeDot}
-            >
-                <View style={styles.slide}>
-                    <Image
-                        source={require('../assets/images/onboardscreen-1.png')}
-                        style={styles.image}
-                        resizeMode="cover"
-                    />
-                    <View style={{position: 'absolute', top: height*0.24, left: width*0.05, right: width*0.05}}>
-                        <Text style={[styles.text, {color: '#fff', textAlign: 'center'}]}>
-                            Ailenize para göndermenin{' '}
-                            <Text style={[styles.boldText, {color: '#1B93D0'}]}>güvenilir</Text>{' '}
-                            ve{' '}
-                            <Text style={[styles.boldText, {color: '#57B03C'}]}>hızlı</Text>{' '}
-                            yolu!
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.container}>
+                <View style={styles.onboardingHeader}>
+                    <TouchableOpacity onPress={goLanguageScreen} style={styles.langContainer}>
+                        <Image
+                            source={getLanguageFlag(selectedLanguage)}
+                            style={styles.icon}
+                        />
+                        <Text style={[styles.smallText, {color: currentIndex === 0 ? '#FFF' : '#000'}]}>
+                            {selectedLanguage}
                         </Text>
-                    </View>
-                </View>
-
-                <View style={styles.slide}>
+                    </TouchableOpacity>
                     <Image
-                        source={require('../assets/images/onboardscreen-2.png')}
-                        style={styles.image}
-                        resizeMode="cover"
+                        source={require('../assets/images/logo.png')}
+                        style={[styles.logo, { right: width * 0.075 }]}
                     />
-                    <View style={{position: 'absolute', bottom: height*0.24, left: width*0.05, right: width*0.05}}>
-                        <Text style={[styles.text, {color: '#000'}]}>
-                            Ödemelerinizi {"\n"}
-                            <Text style={styles.boldText}>Amerikan Doları ($)</Text>,{"\n"}
-                            <Text style={styles.boldText}>Euro (€)</Text> ve <Text style={styles.boldText}>İngiliz Sterlini (£)</Text>{"\n"}cinsinden yapabilirsiniz.
-                        </Text>
-                    </View>
                 </View>
+                <Swiper
+                    loop={false}
+                    showsButtons={false}
+                    showsPagination={true}
+                    onIndexChanged={(index) => setCurrentIndex(index)}
+                    dotStyle={styles.dot}
+                    activeDotStyle={styles.activeDot}
+                >
+                    <View style={styles.slide}>
+                        <Image
+                            source={require('../assets/images/onboardscreen-1.png')}
+                            style={styles.image}
+                            resizeMode="cover"
+                        />
+                        <View style={{position: 'absolute', top: height*0.24, left: width*0.05, right: width*0.05}}>
+                            <Text style={[styles.text, {color: '#fff', textAlign: 'center'}]}>
+                                Ailenize para göndermenin{' '}
+                                <Text style={[styles.boldText, {color: '#1B93D0'}]}>güvenilir</Text>{' '}
+                                ve{' '}
+                                <Text style={[styles.boldText, {color: '#57B03C'}]}>hızlı</Text>{' '}
+                                yolu!
+                            </Text>
+                        </View>
+                    </View>
 
-                <View style={styles.slide}>
-                    <Image
-                        source={require('../assets/images/onboardscreen-3.png')}
-                        style={styles.image}
-                        resizeMode="cover"
-                    />
-                    <View style={{position: 'absolute', top: height*0.48, left: width*0.05, right: width*0.05}}>
-                        <Text style={styles.text}>Mükemmel döviz kurlarıyla{"\n"}<Text style={styles.boldText}>30 dakikalık</Text> teslim garantisi.</Text>
+                    <View style={styles.slide}>
+                        <Image
+                            source={require('../assets/images/onboardscreen-2.png')}
+                            style={styles.image}
+                            resizeMode="cover"
+                        />
+                        <View style={{position: 'absolute', bottom: height*0.24, left: width*0.05, right: width*0.05}}>
+                            <Text style={[styles.text, {color: '#000'}]}>
+                                Ödemelerinizi {"\n"}
+                                <Text style={styles.boldText}>Amerikan Doları ($)</Text>,{"\n"}
+                                <Text style={styles.boldText}>Euro (€)</Text> ve <Text style={styles.boldText}>İngiliz Sterlini (£)</Text>{"\n"}cinsinden yapabilirsiniz.
+                            </Text>
+                        </View>
                     </View>
+
+                    <View style={styles.slide}>
+                        <Image
+                            source={require('../assets/images/onboardscreen-3.png')}
+                            style={styles.image}
+                            resizeMode="cover"
+                        />
+                        <View style={{position: 'absolute', top: height*0.48, left: width*0.05, right: width*0.05}}>
+                            <Text style={styles.text}>Mükemmel döviz kurlarıyla{"\n"}<Text style={styles.boldText}>30 dakikalık</Text> teslim garantisi.</Text>
+                        </View>
+                    </View>
+                </Swiper>
+                <View style={styles.buttonsContainer}>
+                    <CustomButton
+                        title='Giriş Yap'
+                        onPress={goLoginScreen}
+                        width={150}
+                        height={45}
+                        icon={null}
+                    />
+                    <CustomButton
+                        title='Üye Ol'
+                        backgroundColor='#1B93D0'
+                        width={150}
+                        height={45}
+                        onPress={goRegisterScreen}
+                        icon={null}
+                    />
                 </View>
-            </Swiper>
-            <View style={styles.buttonsContainer}>
-                <CustomButton
-                    title='Giriş Yap'
-                    onPress={goLoginScreen}
-                    width={150}
-                    height={45}
-                    icon={null}
-                />
-                <CustomButton
-                    title='Üye Ol'
-                    backgroundColor='#1B93D0'
-                    width={150}
-                    height={45}
-                    onPress={goRegisterScreen}
-                    icon={null}
-                />
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
     container: {
         flex: 1,
     },
@@ -135,7 +141,7 @@ const styles = StyleSheet.create({
     },
     onboardingHeader: {
         position: 'absolute',
-        top: height * 0.05,
+        top: 10,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -204,7 +210,7 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         position: 'absolute',
-        bottom: height*0.06,
+        bottom: 20,
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-evenly',

@@ -46,6 +46,8 @@ import PaymentDeclined from '../screens/transaction/PaymentDeclined';
 import AddCard from '../screens/profile/AddCard';
 import EditPhoneScreen from '../screens/profile/EditPhoneScreen';
 import EditCountryScreen from '../screens/profile/EditCountryScreen';
+import InviteFriend from '../screens/profile/InviteFriend';
+import { LinearGradient } from 'expo-linear-gradient';
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
@@ -363,6 +365,28 @@ const AppNavigator = () => {
             <Stack.Screen
                 name="EditCountry"
                 component={EditCountryScreen}
+            />
+            <Stack.Screen
+                name="InviteFriend"
+                component={InviteFriend}
+                options={{
+                    title: 'Arkadaşını Davet Et',
+                    headerBackground: () => (
+                        <LinearGradient
+                            colors={['#1A83B9', '#57B03C']}
+                            start={{ x: 0, y: 0.5 }}
+                            end={{ x: 1, y: 0.5 }}
+                            style={{ flex: 1 }}
+                        />
+                    ),
+                    headerTintColor: '#FFFFFF',
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerStyle: {
+                        backgroundColor: 'transparent',
+                    }
+                }}
             />
         </Stack.Navigator>
     );

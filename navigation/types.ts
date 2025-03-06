@@ -43,7 +43,15 @@ export type RootStackParamList = {
     TransactionPurpose: {
         purpose?: string;
     };
-    TransactionPaymentMethod: undefined;
+    TransactionPaymentMethod: {
+        billingAddress?: {
+            country: string;
+            city: string;
+            address: string;
+            houseNumber: string;
+            postalCode: string;
+        };
+    };
     TransactionFinish: undefined;
     NewTransactionInformations: undefined;
     NewTransactionReceiver: undefined;

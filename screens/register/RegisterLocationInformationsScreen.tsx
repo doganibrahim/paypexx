@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacit
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterLocationInformationsScreen = ({navigation}) => {
     const [selectedCountry, setSelectedCountry] = useState({
@@ -11,6 +12,10 @@ const RegisterLocationInformationsScreen = ({navigation}) => {
         dialCode: '+90',
         flag: require('../../assets/images/flags/tr.png')
     });
+    const [city, setCity] = useState('');
+    const [address, setAddress] = useState('');
+    const [houseNumber, setHouseNumber] = useState('');
+    const [postalCode, setPostalCode] = useState('');
 
     const goSelectCountry = () => {
         navigation.navigate('SelectCountry', {
@@ -24,6 +29,24 @@ const RegisterLocationInformationsScreen = ({navigation}) => {
             }
         });
     }
+
+    const handleSubmit = async () => {
+        const billingAddress = {
+            country: selectedCountry.label,
+            city,
+            address,
+            houseNumber,
+            postalCode
+        };
+        
+        try {
+            // Adres bilgilerini AsyncStorage'a kaydet
+            await AsyncStorage.setItem('billingAddress', JSON.stringify(billingAddress));
+            navigation.navigate('LoginScreen');
+        } catch (error) {
+            console.error('Adres bilgileri kaydedilirken hata oluştu:', error);
+        }
+    };
 
     return (
         <KeyboardAvoidingView
@@ -49,26 +72,54 @@ const RegisterLocationInformationsScreen = ({navigation}) => {
 
                     <View style={{marginBottom: 10}}>
                         <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Şehir</Text>
-                        <CustomInput logo={undefined} placeholder="Şehir girin" value={undefined} onChangeText={undefined} />
+                        <CustomInput 
+                            logo={undefined} 
+                            placeholder="Şehir girin" 
+                            value={city} 
+                            onChangeText={setCity} 
+                        />
                     </View>
 
                     <View style={{marginBottom: 10}}>
                         <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Adres</Text>
-                        <CustomInput logo={undefined} placeholder="Açık adresinizi girin" value={undefined} onChangeText={undefined} />
+                        <CustomInput 
+                            logo={undefined} 
+                            placeholder="Açık adresinizi girin" 
+                            value={address} 
+                            onChangeText={setAddress} 
+                        />
                     </View>
 
                     <View style={{marginBottom: 10}}>
                         <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Ev/Apartman No</Text>
-                        <CustomInput logo={undefined} placeholder="Ev/Apartman numaranızı girin" value={undefined} onChangeText={undefined} keyboardType="numeric" />
+                        <CustomInput 
+                            logo={undefined} 
+                            placeholder="Ev/Apartman numaranızı girin" 
+                            value={houseNumber} 
+                            onChangeText={setHouseNumber} 
+                            keyboardType="numeric" 
+                        />
                     </View>
 
                     <View style={{marginBottom: 10}}>
                         <Text style={[styles.mediumText, {fontSize: 16, lineHeight: 22, marginBottom: 5, marginLeft: 5}]}>Posta Kodu</Text>
-                        <CustomInput logo={undefined} placeholder="Posta kodunu girin" value={undefined} onChangeText={undefined} keyboardType="numeric" />
+                        <CustomInput 
+                            logo={undefined} 
+                            placeholder="Posta kodunu girin" 
+                            value={postalCode} 
+                            onChangeText={setPostalCode} 
+                            keyboardType="numeric" 
+                        />
                     </View>
 
                     <View>
-                        <CustomButton title="Kaydınız tamamlayın" width={"100%"} height={55} onPress={() => {}} icon={undefined} />
+                        <CustomButton 
+                            title="Kaydınız tamamlayın" 
+                            width={"100%"} 
+                            height={55} 
+                            onPress={handleSubmit} 
+                            icon={undefined} 
+                        />
                     </View>
                     <View>
                     <Text style={[styles.lightText, {fontSize: 12, lineHeight: 16, marginHorizontal: 5, textAlign: 'left'}]}>Devam butonuna basarak, <Text style={[styles.boldText, {color: '#57B03C'}]}>Hizmet Şartları</Text> ve <Text style={[styles.boldText, {color: '#57B03C'}]}>Gizlilik Politikası</Text>'nı okuduğunuzu ve kabul etmiş olduğunuzu teyit etmiş olursunuz.</Text>

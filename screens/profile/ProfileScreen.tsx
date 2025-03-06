@@ -25,7 +25,7 @@ const ProfileScreen = ({ navigation }) => {
         { icon: require('../../assets/images/icons/profile/tick-circle.png'), title: 'Hesabımı Doğrula', hasArrow: true, route: 'AccountVerify' },
         { icon: require('../../assets/images/icons/profile/credit-card.png'), title: 'Kayıtlı Kartlarım', hasArrow: true, route: 'SavedCards' },
         { icon: require('../../assets/images/icons/profile/help-circle.png'), title: 'Destek Talep Et', hasArrow: true, route: 'RequestSupport' },
-        { icon: require('../../assets/images/icons/profile/user-plus.png'), title: 'Arkadaşını Davet Et', hasArrow: true, route: '' },
+        { icon: require('../../assets/images/icons/profile/user-plus.png'), title: 'Arkadaşını Davet Et', hasArrow: true, route: 'InviteFriend' },
     ];
 
     const copyCustomerNumber = async () => {

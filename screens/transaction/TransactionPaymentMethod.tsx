@@ -4,14 +4,31 @@ import CustomButton from '../../components/CustomButton';
 import CustomInputWhite from '../../components/CustomInputWhite';
 import BottomMenu from '../../components/BottomMenu';
 import { useCurrency } from '../../context/CurrencyContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import countries from '../../constants/countries';
 
-const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
+
+const TransactionPaymentMethod = ({navigation, route}: {navigation: any, route: any}) => {
     const [cardName, setCardName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const { receiverCurrency } = useCurrency();
+    const [billingAddress, setBillingAddress] = useState(null);
+    const [isEditingAddress, setIsEditingAddress] = useState(false);
+    const [editCountry, setEditCountry] = useState('');
+    const [editCity, setEditCity] = useState('');
+    const [editAddress, setEditAddress] = useState('');
+    const [editHouseNumber, setEditHouseNumber] = useState('');
+    const [editPostalCode, setEditPostalCode] = useState('');
+    const [selectedCountry, setSelectedCountry] = useState({
+        key: 'tr',
+        label: 'Türkiye',
+        dialCode: '+90',
+        flag: require('../../assets/images/flags/tr.png')
+    });
 
     const formatExpiryDate = (text: string) => {
         // Silme işlemi sırasında "/" karakterini kaldır
@@ -51,6 +68,11 @@ const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
         return formatted;
     };
 
+    const formatAddress = (address: any) => {
+        if (!address) return '';
+        return `${address.address}, No:${address.houseNumber}, ${address.city}, ${address.postalCode}\n${address.country}`;
+    };
+
     const handlePayment = () => {
         navigation.navigate('PaymentApproved');
     }
@@ -75,6 +97,38 @@ const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
         }
     };
 
+    const goSelectCountry = () => {
+        navigation.navigate('SelectCountry', {
+            onSelect: (country) => {},
+            returnScreen: 'TransactionPaymentMethod',
+            keepEditing: true
+        });
+    };
+
+    const handleSaveAddress = async () => {
+        const newAddress = {
+            country: selectedCountry.label,
+            city: editCity,
+            address: editAddress,
+            houseNumber: editHouseNumber,
+            postalCode: editPostalCode
+        };
+
+        // Tüm alanların dolu olup olmadığını kontrol et
+        if (!newAddress.country || !newAddress.city || !newAddress.address || !newAddress.houseNumber || !newAddress.postalCode) {
+            // Eksik alan varsa kaydetme ve formu kapatma
+            return;
+        }
+
+        try {
+            await AsyncStorage.setItem('billingAddress', JSON.stringify(newAddress));
+            setBillingAddress(newAddress);
+            setIsEditingAddress(false); // Sadece başarılı kaydetme işleminde formu kapat
+        } catch (error) {
+            console.error('Adres kaydedilirken hata oluştu:', error);
+        }
+    };
+
     useEffect(() => {
         const keyboardShowListener = Keyboard.addListener(
             Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
@@ -91,6 +145,147 @@ const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
             keyboardHideListener.remove();
         };
     }, []);
+
+    useEffect(() => {
+        // Sayfa yüklendiğinde adres bilgilerini çek
+        const getBillingAddress = async () => {
+            try {
+                const savedAddress = await AsyncStorage.getItem('billingAddress');
+                if (savedAddress && !isEditingAddress) {
+                    setBillingAddress(JSON.parse(savedAddress));
+                }
+            } catch (error) {
+                console.error('Adres bilgileri çekilirken hata oluştu:', error);
+            }
+        };
+
+        getBillingAddress();
+    }, [isEditingAddress]);
+
+    useEffect(() => {
+        if (isEditingAddress) {
+            // Eğer billingAddress varsa, mevcut değerleri form alanlarına doldur
+            if (billingAddress) {
+                setEditCountry(billingAddress.country);
+                setEditCity(billingAddress.city);
+                setEditAddress(billingAddress.address);
+                setEditHouseNumber(billingAddress.houseNumber);
+                setEditPostalCode(billingAddress.postalCode);
+                // Ülke seçimi için selectedCountry'yi de güncelle
+                const country = countries.find(c => c.country === billingAddress.country);
+                if (country) {
+                    setSelectedCountry({
+                        key: country.key,
+                        label: country.country,
+                        dialCode: country.dialCode,
+                        flag: country.flag
+                    });
+                }
+            } else {
+                setEditCountry('');
+                setEditCity('');
+                setEditAddress('');
+                setEditHouseNumber('');
+                setEditPostalCode('');
+            }
+        }
+    }, [isEditingAddress]);
+
+    useEffect(() => {
+        // Route params'dan gelen ülke seçimini ve form durumunu kontrol et
+        if (route.params?.selectedCountry) {
+            setSelectedCountry({
+                key: route.params.selectedCountry.key,
+                label: route.params.selectedCountry.country,
+                dialCode: route.params.selectedCountry.dialCode,
+                flag: route.params.selectedCountry.flag
+            });
+            setEditCountry(route.params.selectedCountry.country);
+        }
+        
+        // Form durumunu güncelle
+        if (route.params?.isEditingAddress !== undefined) {
+            setIsEditingAddress(route.params.isEditingAddress);
+        }
+    }, [route.params?.selectedCountry, route.params?.isEditingAddress]);
+
+    // Fatura adresi bölümünü güncelle
+    const renderBillingAddressSection = () => {
+        if (isEditingAddress) {
+            return (
+                <View style={{gap: 8, marginTop: 16}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8}}>
+                        <Text style={{fontSize: 16, fontWeight: '600'}}>Fatura Adresi</Text>
+                        <TouchableOpacity onPress={() => setIsEditingAddress(false)}>
+                            <Text style={{color: '#666', fontSize: 14}}>İptal</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{gap: 12}}>
+                        <TouchableOpacity style={styles.countryContainer} onPress={goSelectCountry}>
+                            <View style={styles.flagContainer}>
+                                <Image source={selectedCountry.flag} style={styles.flag} />
+                            </View>
+                            <Text style={styles.countryName}>{selectedCountry.label}</Text>
+                            <Ionicons name="chevron-down" size={24} color="#666" />
+                        </TouchableOpacity>
+                        <CustomInputWhite
+                            value={editCity}
+                            onChangeText={setEditCity}
+                            placeholder="Şehir"
+                        />
+                        <CustomInputWhite
+                            value={editAddress}
+                            onChangeText={setEditAddress}
+                            placeholder="Adres"
+                        />
+                        <CustomInputWhite
+                            value={editHouseNumber}
+                            onChangeText={setEditHouseNumber}
+                            placeholder="Ev/Apartman No"
+                            keyboardType="numeric"
+                        />
+                        <CustomInputWhite
+                            value={editPostalCode}
+                            onChangeText={setEditPostalCode}
+                            placeholder="Posta Kodu"
+                            keyboardType="numeric"
+                        />
+                        <CustomButton
+                            title="Kaydet"
+                            onPress={handleSaveAddress}
+                            width={'100%'}
+                            height={45}
+                            icon={undefined}
+                        />
+                    </View>
+                </View>
+            );
+        }
+
+        return (
+            <View style={{gap: 8, marginTop: 16, paddingHorizontal: 2}}>
+                <TouchableOpacity 
+                    style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12}}
+                    onPress={() => {
+                        setEditCountry('');
+                        setEditCity('');
+                        setEditAddress('');
+                        setEditHouseNumber('');
+                        setEditPostalCode('');
+                        setIsEditingAddress(true);
+                    }}
+                >
+                    <Text style={{fontSize: 16, fontWeight: '600'}}>Fatura Adresi</Text>
+                    <Image source={require('../../assets/images/icons/transaction/pen.png')} style={{width: 16, height: 16, marginRight: 4}}/>
+                </TouchableOpacity>
+                <View>
+                    <Text style={{fontSize: 16, fontWeight: '400', color: '#777'}}>
+                        {formatAddress(billingAddress)}
+                    </Text>
+                </View>
+            </View>
+        );
+    };
 
     return (
         <View style={{flex: 1}}>
@@ -191,6 +386,7 @@ const TransactionPaymentMethod = ({navigation}: {navigation: any}) => {
                                     />
                                 </View>
                             </View>
+                            {renderBillingAddressSection()}
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -230,6 +426,30 @@ const styles = StyleSheet.create({
     },
     bottomMenu: {
         marginHorizontal: 18,
+    },
+    countryContainer: {
+        height: 48,
+        borderRadius: 4,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#000',
+        backgroundColor: '#FFF',
+    },
+    flagContainer: {
+        width: 24,
+        height: 24,
+        marginRight: 10,
+    },
+    flag: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 5,
+    },
+    countryName: {
+        flex: 1,
+        marginLeft: 10,
     },
 });
 

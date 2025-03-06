@@ -7,10 +7,19 @@ const SelectCountry = ({ navigation, route }) => {
 
     const handleCountrySelect = (country) => {
         setSelectedCountry(country);
-        if (route.params?.onSelect) {
-            route.params.onSelect(country);
+        const returnScreen = route.params?.returnScreen || 'RegisterLocationInformationsScreen';
+        
+        if (returnScreen === 'TransactionPaymentMethod') {
+            navigation.navigate(returnScreen, {
+                selectedCountry: country,
+                isEditingAddress: true
+            });
+        } else if (returnScreen === 'RegisterLocationInformationsScreen') {
+            if (route.params?.onSelect) {
+                route.params.onSelect(country);
+            }
+            navigation.goBack();
         }
-        navigation.goBack();
     };
 
     return (
