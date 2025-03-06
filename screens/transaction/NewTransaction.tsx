@@ -28,6 +28,14 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
     
     const { senderCurrency, receiverCurrency } = useCurrency();
 
+    React.useEffect(() => {
+        confettiRef.current?.play();
+    }, []);
+
+    React.useEffect(() => {
+        clockRef.current?.play();
+    }, []);
+
     const handleSenderCurrency = () => {
         navigation.navigate('SenderCurrency');
     }
@@ -84,7 +92,7 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
             <View style={styles.rateContainer}>
                 <LottieView 
                     source={require('../../assets/images/icons/transaction/star6.json')}
-                    style={{width: scale(28), height: scale(28), marginLeft: scale(10)}}
+                    style={{width: 28, height: 28, marginLeft: 10}}
                     autoPlay
                     onAnimationFailure={(error) => {
                         console.log('Animation failed:', error);
@@ -99,7 +107,7 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
                     ref={confettiRef}
                     key="confetti-animation"
                     source={require('../../assets/images/icons/transaction/confetti6.json')}
-                    style={{width: scale(26), height: scale(26)}}
+                    style={{width: 26, height: 26}}
                     autoPlay
                 />
                 <MaskedView
@@ -127,7 +135,7 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
                     ref={clockRef}
                     key="clock-animation"
                     source={require('../../assets/images/icons/transaction/clock12.json')}
-                    style={{width: scale(26), height: scale(26)}}
+                    style={{width: 26, height: 26}}
                     autoPlay
                 />
                 <MaskedView
