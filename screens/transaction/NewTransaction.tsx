@@ -49,7 +49,7 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
 
     return (
         <View style={styles.container}>
-        <View>
+        <View style={{flex: 1, justifyContent: 'center'}}>
         <Text style={styles.title}>Transfer ayrıntıları</Text>
             
             <Text style={styles.label}>Gönderen</Text>
@@ -90,8 +90,8 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
             {/* Kur Bilgisi */}
             <View style={styles.rateContainer}>
                 <LottieView 
-                    source={require('../../assets/images/icons/transaction/star6.json')}
-                    style={{width: 28, height: 28, marginLeft: 10}}
+                    source={require('../../assets/images/icons/transaction/star2.json')}
+                    style={{width: 40, height: 40, marginLeft: 4}}
                     autoPlay
                     onAnimationFailure={(error) => {
                         console.log('Animation failed:', error);
@@ -105,7 +105,7 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
                 <LottieView 
                     ref={confettiRef}
                     key="confetti-animation"
-                    source={require('../../assets/images/icons/transaction/confetti6.json')}
+                    source={require('../../assets/images/icons/transaction/confetti2.json')}
                     style={{width: 26, height: 26}}
                     autoPlay
                 />
@@ -157,7 +157,6 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
                 </MaskedView>
                 </View>
             </View>
-
             <CustomButtonEndIcon title="İlerlemeye devam et" onPress={handleNext} width={'100%'} height={scale(55)} icon={require('../../assets/images/icons/transaction/arrowRight.png')} textSize={scale(16)} />
         </View>
         <BottomMenu onTabPress={() => {}} />
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: scale(24),
         fontWeight: 'bold',
-        marginBottom: scale(24),
+        marginBottom: scale(16),
         marginTop: scale(24),
         marginLeft: scale(8),
     },
@@ -226,7 +225,6 @@ const styles = StyleSheet.create({
         color: '#000',
         fontWeight: '500',
         fontSize: scale(16),
-        marginLeft: scale(5),
     },
     infoContainer: {
         marginTop: scale(8),
