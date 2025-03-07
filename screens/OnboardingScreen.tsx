@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Platform} from 'react-native';
 import Swiper from 'react-native-swiper';
 import CustomButton from "../components/CustomButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
