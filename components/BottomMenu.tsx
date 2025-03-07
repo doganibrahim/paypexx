@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: '#eee',
         marginHorizontal: scale(-16),
+        marginBottom: scale(5),
         paddingHorizontal: scale(16),
     },
     menuItem: {

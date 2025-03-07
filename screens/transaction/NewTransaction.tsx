@@ -12,7 +12,6 @@ import { useCurrency } from '../../context/CurrencyContext';
 const { width } = Dimensions.get('window');
 const scale = (size: number) => (width / 375) * size;
 
-// Tip tanımlaması ekleyelim
 type Currency = {
     country: string;
     currency: string;
@@ -169,7 +168,8 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: scale(16),
+        paddingHorizontal: scale(16),
+        paddingTop: scale(16),
         backgroundColor: '#F5F5F5',
         justifyContent: 'space-between',
     },
