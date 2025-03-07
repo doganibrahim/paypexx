@@ -67,11 +67,22 @@ const HomeScreen = () => {
         setActiveTab(tab);
     };
 
+    // iOS için dinamik offset hesaplama
+    const getKeyboardOffset = () => {
+        if (Platform.OS !== 'ios') return 0;
+        
+        const { height } = Dimensions.get('window');
+        // iPhone X ve sonrası için daha büyük offset
+        const isIphoneX = height > 800;
+        
+        return isIphoneX ? 20 : 0;
+    };
+
     return (
         <KeyboardAvoidingView 
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+            keyboardVerticalOffset={getKeyboardOffset()}
         >
             <ScrollView 
                 showsVerticalScrollIndicator={false}

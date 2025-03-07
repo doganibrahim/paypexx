@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform, Keyboard, Dimensions } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
@@ -48,11 +48,22 @@ const NewTransactionReview = () => {
         navigation.navigate('TransactionPaymentMethod' as never);
     };
 
+    // iOS için dinamik offset hesaplama
+    const getKeyboardOffset = () => {
+        if (Platform.OS !== 'ios') return 0;
+        
+        const { height } = Dimensions.get('window');
+        // iPhone X ve sonrası için daha büyük offset
+        const isIphoneX = height > 800;
+        
+        return isIphoneX ? 88 : 64;
+    };
+
     return (
         <KeyboardAvoidingView 
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+            keyboardVerticalOffset={getKeyboardOffset()}
         >
             <ScrollView 
                 style={styles.scrollView}

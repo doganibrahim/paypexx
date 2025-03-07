@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, TextInput, Image, Dimensions } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import PhoneInput from 'react-native-phone-number-input';
@@ -241,11 +241,22 @@ const SettingsScreen = () => {
     }
   }, [route.params?.selectedCountry]);
 
+  // iOS için dinamik offset hesaplama
+  const getKeyboardOffset = () => {
+    if (Platform.OS !== 'ios') return 0;
+    
+    const { height } = Dimensions.get('window');
+    // iPhone X ve sonrası için daha büyük offset
+    const isIphoneX = height > 800;
+    
+    return isIphoneX ? 88 : 64;
+  };
+
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+      keyboardVerticalOffset={getKeyboardOffset()}
     >
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>

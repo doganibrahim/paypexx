@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, Keyboard, Platform, StatusBar, Dimensions } from 'react-native';
 import BottomMenu from '../../components/BottomMenu';
 import { ScrollView } from 'react-native-gesture-handler';
 import CustomInput from '../../components/CustomInput';
 import CustomButtonEndIcon from '../../components/EndIconCustomButton';
-import { Platform } from 'react-native';
 import { useCurrency } from '../../context/CurrencyContext';
 
 const NewTransactionInformations = ({ navigation }: { navigation: any }) => {
@@ -42,12 +41,23 @@ const NewTransactionInformations = ({ navigation }: { navigation: any }) => {
         navigation.navigate('NewTransactionReview');
     }
     
+    // iOS için dinamik offset hesaplama
+    const getKeyboardOffset = () => {
+        if (Platform.OS !== 'ios') return 0;
+        
+        const { height } = Dimensions.get('window');
+        // iPhone X ve sonrası için daha büyük offset
+        const isIphoneX = height > 800;
+        
+        return isIphoneX ? 88 : 64;
+    };
+    
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView 
                 behavior={Platform.OS === "ios" ? "padding" : undefined}
                 style={{flex: 1}}
-                keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+                keyboardVerticalOffset={getKeyboardOffset()}
             >
                 <Text style={styles.title}>Alıcı bigilerini ekleyin</Text>
                 <ScrollView 
