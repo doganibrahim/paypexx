@@ -1,5 +1,5 @@
-import React, {useCallback, useState} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Platform} from 'react-native';
+import React, {useCallback, useState, useRef} from 'react';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Swiper from 'react-native-swiper';
 import CustomButton from "../components/CustomButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,11 +7,10 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getLanguageFlag } from '../constants/languages';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const { width, height } = Dimensions.get('window');
 
 const OnboardingScreen = ({navigation}) => {
     const [selectedLanguage, setSelectedLanguage] = useState('TR');
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const currentIndexRef = useRef(0);
     const insets = useSafeAreaInsets();
 
     useFocusEffect(
@@ -24,6 +23,10 @@ const OnboardingScreen = ({navigation}) => {
             loadLanguage();
         }, [])
     );
+
+    const handleIndexChanged = useCallback((index) => {
+        currentIndexRef.current = index;
+    }, []);
 
     const goLanguageScreen = () => {
         navigation.navigate('ChangeLanguage');
@@ -45,30 +48,32 @@ const OnboardingScreen = ({navigation}) => {
                         source={getLanguageFlag(selectedLanguage)}
                         style={styles.icon}
                     />
-                    <Text style={[styles.smallText, {color: currentIndex === 0 ? '#FFF' : '#000'}]}>
+                    <Text style={[styles.smallText, {color: '#000'}]}>
                         {selectedLanguage}
                     </Text>
                 </TouchableOpacity>
                 <Image
                     source={require('../assets/images/logo.png')}
-                    style={[styles.logo, { right: width * 0.075 }]}
+                    style={[styles.logo, { right: 28 }]}
                 />
             </View>
             <Swiper
-                loop={false}
+                loop={true}
                 showsButtons={false}
                 showsPagination={true}
-                onIndexChanged={(index) => setCurrentIndex(index)}
+                onIndexChanged={handleIndexChanged}
                 dotStyle={styles.dot}
                 activeDotStyle={styles.activeDot}
+                autoplay={true}
+                autoplayTimeout={5}
             >
-                <View style={styles.slide}>
+                <View style={styles.slide} key={0}>
                     <Image
                         source={require('../assets/images/onboardscreen-1.png')}
                         style={styles.image}
                         resizeMode="cover"
                     />
-                    <View style={{position: 'absolute', top: height*0.24, left: width*0.05, right: width*0.05}}>
+                    <View style={{position: 'absolute', top: 180, left: 20, right: 20}}>
                         <Text style={[styles.text, {color: '#fff', textAlign: 'center'}]}>
                             Ailenize para göndermenin{' '}
                             <Text style={[styles.boldText, {color: '#1B93D0'}]}>güvenilir</Text>{' '}
@@ -79,13 +84,13 @@ const OnboardingScreen = ({navigation}) => {
                     </View>
                 </View>
 
-                <View style={styles.slide}>
+                <View style={styles.slide} key={1}>
                     <Image
                         source={require('../assets/images/onboardscreen-2.png')}
                         style={styles.image}
                         resizeMode="cover"
                     />
-                    <View style={{position: 'absolute', bottom: height*0.24, left: width*0.05, right: width*0.05}}>
+                    <View style={{position: 'absolute', bottom: 180, left: 20, right: 20}}>
                         <Text style={[styles.text, {color: '#000'}]}>
                             Ödemelerinizi {"\n"}
                             <Text style={styles.boldText}>Amerikan Doları ($)</Text>,{"\n"}
@@ -94,13 +99,13 @@ const OnboardingScreen = ({navigation}) => {
                     </View>
                 </View>
 
-                <View style={styles.slide}>
+                <View style={styles.slide} key={2}>
                     <Image
                         source={require('../assets/images/onboardscreen-3.png')}
                         style={styles.image}
                         resizeMode="cover"
                     />
-                    <View style={{position: 'absolute', top: height*0.48, left: width*0.05, right: width*0.05}}>
+                    <View style={{position: 'absolute', top: 370, left: 20, right: 20}}>
                         <Text style={styles.text}>Mükemmel döviz kurlarıyla{"\n"}<Text style={styles.boldText}>30 dakikalık</Text> teslim garantisi.</Text>
                     </View>
                 </View>
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     langContainer: {
-        left: width * 0.075,
+        left: 28,
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
@@ -192,7 +197,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         marginLeft: 3,
         marginRight: 3,
-        marginBottom: height * 0.12,
+        marginBottom: 75,
     },
     activeDot: {
         backgroundColor: '#fff',
@@ -201,7 +206,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         marginLeft: 3,
         marginRight: 3,
-        marginBottom: height * 0.12,
+        marginBottom: 75,
     },
     buttonsContainer: {
         position: 'absolute',

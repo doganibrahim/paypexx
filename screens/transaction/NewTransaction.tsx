@@ -101,17 +101,17 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
             </View>
             {/* Bilgi Metni */}
             <View style={styles.infoContainer}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={[styles.infoRow, styles.subContainer]}>
                 <LottieView 
                     ref={confettiRef}
                     key="confetti-animation"
                     source={require('../../assets/images/icons/transaction/confetti2.json')}
-                    style={{width: 26, height: 26}}
+                    style={{width: 40, height: 40, marginLeft: 6}}
                     autoPlay
                 />
                 <MaskedView
                     maskElement={
-                        <Text style={styles.infoText}>
+                        <Text style={[styles.infoText, {marginLeft: -2}]}>
                             Tüm transferler ücretsizdir
                         </Text>
                     }
@@ -122,24 +122,24 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
                         end={{x: 0.4, y: 0.5}}
                         style={{height: scale(24)}}
                     >
-                        <Text style={[styles.infoText, {opacity: 0}]}>
+                        <Text style={[styles.infoText, {opacity: 0, marginLeft: -2}]}>
                             Tüm transferler ücretsizdir
                         </Text>
                     </LinearGradient>
                 </MaskedView>
                 </View>
 
-                <View style={{flexDirection: 'row'}}>
+                <View style={[styles.infoRow, styles.subContainer, {marginLeft: -4}]}>
                 <LottieView 
                     ref={clockRef}
                     key="clock-animation"
                     source={require('../../assets/images/icons/transaction/clock2.json')}
-                    style={{width: 26, height: 26}}
+                    style={{width: 40, height: 40, marginLeft: 4}}
                     autoPlay
                 />
                 <MaskedView
                     maskElement={
-                        <Text style={styles.infoText}>
+                        <Text style={[styles.infoText, {marginLeft: 8}]}>
                             30 dakikada teslim garantisi
                         </Text>
                     }
@@ -150,7 +150,7 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
                         end={{x: 0.4, y: 0.5}}
                         style={{height: scale(24)}}
                     >
-                        <Text style={[styles.infoText, {opacity: 0}]}>
+                        <Text style={[styles.infoText, {opacity: 0, marginLeft: 8}]}>
                             30 dakikada teslim garantisi
                         </Text>
                     </LinearGradient>
@@ -221,6 +221,14 @@ const styles = StyleSheet.create({
         height: scale(50),
         justifyContent: 'flex-start',
     },
+    subContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: scale(12),
+        borderRadius: scale(15),
+        height: scale(45),
+        justifyContent: 'flex-start',
+    },
     rateText: {
         color: '#000',
         fontWeight: '500',
@@ -232,14 +240,23 @@ const styles = StyleSheet.create({
         gap: scale(4),
     },
     infoText: {
-        marginLeft: scale(3),
         fontSize: scale(16),
         lineHeight: scale(22),
+        marginLeft: scale(4),
         fontWeight: '600',
     },
     dropdownIcon: {
         width: scale(24),
         height: scale(24),
+    },
+    infoRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    lottieIcon: {
+        width: scale(26),
+        height: scale(26),
+        marginRight: scale(4),
     },
 });
 
