@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         position: 'absolute',
-        bottom: 20,
+        bottom: 25,
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-evenly',

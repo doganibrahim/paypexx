@@ -143,10 +143,10 @@ const NewTransactionInformations = ({ navigation }: { navigation: any }) => {
                             icon={require('../../assets/images/icons/transaction/arrowRight.png')} 
                             textSize={16} 
                         />
-                        <BottomMenu onTabPress={() => {}} />
                     </>
                 )}
             </KeyboardAvoidingView>
+            <BottomMenu onTabPress={() => {}} />
         </View>
     );
 };
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 16,
+        paddingTop: 16,
     },
     title: {
         fontSize: 20,

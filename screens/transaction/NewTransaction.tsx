@@ -133,7 +133,7 @@ const NewTransaction = ({ navigation }: { navigation: any }) => {
                 <LottieView 
                     ref={clockRef}
                     key="clock-animation"
-                    source={require('../../assets/images/icons/transaction/clock12.json')}
+                    source={require('../../assets/images/icons/transaction/clock2.json')}
                     style={{width: 26, height: 26}}
                     autoPlay
                 />
