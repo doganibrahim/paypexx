@@ -66,6 +66,25 @@ const SafeScreenWrapper = ({ children }) => {
   );
 };
 
+const bottomToTopAnimation = {
+    cardStyleInterpolator: ({ current, layouts }) => ({
+        cardStyle: {
+            transform: [
+                {
+                    translateY: current.progress.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [layouts.screen.height, 0],
+                    }),
+                },
+            ],
+            opacity: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.5, 1],
+            }),
+        },
+    }),
+};
+
 const AppNavigator = () => {
     return (
         <Stack.Navigator 
@@ -222,7 +241,8 @@ const AppNavigator = () => {
                 name="PhoneCode"
                 component={PhoneCodeScreen}
                 options={{
-                    headerShown: false
+                    headerShown: false,
+                    ...bottomToTopAnimation
                 }}
             />
             <Stack.Screen
@@ -249,6 +269,7 @@ const AppNavigator = () => {
             <Stack.Screen
                 name="SelectCountry"
                 component={SelectCountry}
+                options={bottomToTopAnimation}
             />
             <Stack.Screen
                 name="Settings"
@@ -316,10 +337,46 @@ const AppNavigator = () => {
             <Stack.Screen
                 name="SenderCurrency"
                 component={SenderCurrencyScreen}
+                options={{
+                    cardStyleInterpolator: ({ current, layouts }) => ({
+                        cardStyle: {
+                            transform: [
+                                {
+                                    translateY: current.progress.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [layouts.screen.height, 0],
+                                    }),
+                                },
+                            ],
+                            opacity: current.progress.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0.5, 1],
+                            }),
+                        },
+                    }),
+                }}
             />
             <Stack.Screen
                 name="ReceiverCurrency"
                 component={ReceiverCurrencyScreen}
+                options={{
+                    cardStyleInterpolator: ({ current, layouts }) => ({
+                        cardStyle: {
+                            transform: [
+                                {
+                                    translateY: current.progress.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [layouts.screen.height, 0],
+                                    }),
+                                },
+                            ],
+                            opacity: current.progress.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0.5, 1],
+                            }),
+                        },
+                    }),
+                }}
             />
             <Stack.Screen
                 name="NewTransactionReceiver"
@@ -361,6 +418,7 @@ const AppNavigator = () => {
                 component={TransactionPurpose}
                 options={{
                     title: 'Transfer Amacı',
+                    ...bottomToTopAnimation
                 }}
             />
             <Stack.Screen
@@ -424,11 +482,13 @@ const AppNavigator = () => {
                 component={EditPhoneScreen}
                 options={{
                     title: 'Telefon Numarası',
+                    ...bottomToTopAnimation
                 }}
             />
             <Stack.Screen
                 name="EditCountry"
                 component={EditCountryScreen}
+                options={bottomToTopAnimation}
             />
             <Stack.Screen
                 name="InviteFriend"
