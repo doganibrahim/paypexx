@@ -68,21 +68,69 @@ const SafeScreenWrapper = ({ children }) => {
 
 const AppNavigator = () => {
     return (
-        <Stack.Navigator initialRouteName="Onboarding" screenOptions={{
-            cardStyle: { backgroundColor: '#F5F5F5' },
-            headerShadowVisible: false,
-            title: '',
-                    headerStyle: {
-                        backgroundColor: '#F5F5F5',
-                        height: 80,
+        <Stack.Navigator 
+            initialRouteName="Onboarding" 
+            screenOptions={{
+                cardStyle: { backgroundColor: '#F5F5F5' },
+                headerShadowVisible: false,
+                title: '',
+                headerStyle: {
+                    backgroundColor: '#F5F5F5',
+                    height: 80,
+                },
+                headerLeftContainerStyle: {
+                    paddingLeft: 10,
+                },
+                headerRightContainerStyle: {
+                    paddingRight: 20,
+                },
+                cardStyleInterpolator: ({ current, layouts }) => ({
+                    cardStyle: {
+                        transform: [
+                            {
+                                translateX: current.progress.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [layouts.screen.width, 0],
+                                }),
+                            },
+                        ],
+                        opacity: current.progress.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [0.5, 1],
+                        }),
                     },
-                    headerLeftContainerStyle: {
-                        paddingLeft: 10,
+                    overlayStyle: {
+                        opacity: current.progress.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [0, 0.5],
+                        }),
                     },
-                    headerRightContainerStyle: {
-                        paddingRight: 20,
-                    }
-        }}>
+                }),
+                gestureEnabled: true,
+                gestureDirection: 'horizontal',
+                transitionSpec: {
+                    open: {
+                        animation: 'spring',
+                        config: {
+                            stiffness: 1000,
+                            damping: 100,
+                            mass: 3,
+                            overshootClamping: false,
+                            restDisplacementThreshold: 0.01,
+                            restSpeedThreshold: 0.01,
+                        },
+                    },
+                    close: {
+                        animation: 'spring',
+                        config: {
+                            stiffness: 1000,
+                            damping: 100,
+                            mass: 3,
+                        },
+                    },
+                },
+            }}
+        >
             <Stack.Screen
                 name="Onboarding"
                 component={OnboardingScreen}
