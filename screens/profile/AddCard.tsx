@@ -7,13 +7,15 @@ interface CardData {
     cardNumber: string;
     cardHolder: string;
     expiryDate: string;
+    cvv: string;
 }
 
 const AddCard = ({ navigation, route }) => {
     const [newCard, setNewCard] = useState<CardData>({
         cardNumber: '',
         cardHolder: '',
-        expiryDate: ''
+        expiryDate: '',
+        cvv: ''
     });
 
     const formatExpiryDate = (text: string) => {
@@ -138,6 +140,8 @@ const AddCard = ({ navigation, route }) => {
                             <Text style={[styles.label, {fontSize: 12}]}>CVV</Text>
                             <CustomInputWhite
                                 placeholder="CVV"
+                                value={newCard.cvv}
+                                onChangeText={(text) => setNewCard({...newCard, cvv: text})}
                                 keyboardType="numeric"
                                 maxLength={3}
                                 rightIcon={require('../../assets/images/icons/transaction/bank2.png')}

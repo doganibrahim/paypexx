@@ -7,6 +7,7 @@ interface CardData {
     cardNumber: string;
     cardHolder: string;
     expiryDate: string;
+    cvv: string;
 }
 
 const SavedCards = ({ navigation }) => {
@@ -14,12 +15,14 @@ const SavedCards = ({ navigation }) => {
         {
             cardNumber: '5282345678901289',
             cardHolder: 'Eren DEMİR',
-            expiryDate: '09/25'
+            expiryDate: '09/25',
+            cvv: '123'
         },
         {
             cardNumber: '5282345678901289',
             cardHolder: 'Eren DEMİR',
-            expiryDate: '09/25'
+            expiryDate: '09/25',
+            cvv: '456'
         }
     ];
 
@@ -27,6 +30,13 @@ const SavedCards = ({ navigation }) => {
 
     const handleAddCard = (newCard: CardData) => {
         setCards([...cards, newCard]);
+    };
+
+    const handleDeleteCard = (cardToDelete: CardData) => {
+        setCards(cards.filter(card => 
+            card.cardNumber !== cardToDelete.cardNumber || 
+            card.cvv !== cardToDelete.cvv
+        ));
     };
 
     const formatCardNumber = (text: string) => {
@@ -47,6 +57,13 @@ const SavedCards = ({ navigation }) => {
         return number.match(/.{1,4}/g)?.join(' ') || number;
     };
 
+    const handleCardPress = (card: CardData) => {
+        navigation.navigate('DeleteCard', {
+            selectedCard: card,
+            onCardDelete: handleDeleteCard
+        });
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -54,47 +71,49 @@ const SavedCards = ({ navigation }) => {
                 style={styles.scrollView}
             >
                 {cards.map((card, index) => (
-                    <View
+                    <TouchableOpacity
                         key={index}
-                        style={[styles.card]}
+                        onPress={() => handleCardPress(card)}
                     >
-                        <LinearGradient
-                            colors={['#182A77', '#040716']}
-                            style={styles.cardBackground}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 0, y: 1 }}
-                        />
-                        <View style={styles.decorativeCircle}>
+                        <View style={[styles.card]}>
                             <LinearGradient
-                                colors={['#0E194D', 'rgba(14, 25, 77, 0.3)']}
-                                style={styles.circleGradient}
+                                colors={['#182A77', '#040716']}
+                                style={styles.cardBackground}
                                 start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 1 }}
+                                end={{ x: 0, y: 1 }}
                             />
-                        </View>
-                        <View style={styles.cardContent}>
-                            <View style={styles.cardHeader}>
-                                <View></View>
-                                <Image 
-                                    source={require('../../assets/images/icons/profile/mastercardLogo.png')} 
-                                    style={styles.mastercardLogo}
+                            <View style={styles.decorativeCircle}>
+                                <LinearGradient
+                                    colors={['#0E194D', 'rgba(14, 25, 77, 0.3)']}
+                                    style={styles.circleGradient}
+                                    start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 1 }}
                                 />
                             </View>
-                            <Text style={styles.cardNumber}>
-                                {formatDisplayCardNumber(card.cardNumber)}
-                            </Text>
-                            <View style={styles.cardBottom}>
-                                <View style={styles.cardHolderContainer}>
-                                    <Text style={styles.cardHolder} numberOfLines={2}>
-                                        {card.cardHolder}
-                                    </Text>
+                            <View style={styles.cardContent}>
+                                <View style={styles.cardHeader}>
+                                    <View></View>
+                                    <Image 
+                                        source={require('../../assets/images/icons/profile/mastercardLogo.png')} 
+                                        style={styles.mastercardLogo}
+                                    />
                                 </View>
-                                <View>
-                                    <Text style={styles.expiryDate}>{card.expiryDate}</Text>
+                                <Text style={styles.cardNumber}>
+                                    {formatDisplayCardNumber(card.cardNumber)}
+                                </Text>
+                                <View style={styles.cardBottom}>
+                                    <View style={styles.cardHolderContainer}>
+                                        <Text style={styles.cardHolder} numberOfLines={2}>
+                                            {card.cardHolder}
+                                        </Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.expiryDate}>{card.expiryDate}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 ))}
             </ScrollView>
 

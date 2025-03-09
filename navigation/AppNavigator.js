@@ -44,6 +44,7 @@ import PaymentApproved from '../screens/transaction/PaymentApproved';
 import RequestReceived from '../screens/transaction/RequestReceived';
 import PaymentDeclined from '../screens/transaction/PaymentDeclined';
 import AddCard from '../screens/profile/AddCard';
+import DeleteCard from '../screens/profile/DeleteCard';
 import EditPhoneScreen from '../screens/profile/EditPhoneScreen';
 import EditCountryScreen from '../screens/profile/EditCountryScreen';
 import InviteFriend from '../screens/profile/InviteFriend';
@@ -510,6 +511,13 @@ const AppNavigator = () => {
                     headerStyle: {
                         backgroundColor: 'transparent',
                     }
+                }}
+            />
+            <Stack.Screen
+                name="DeleteCard"
+                component={DeleteCard}
+                options={{
+                    headerShown: false
                 }}
             />
         </Stack.Navigator>
