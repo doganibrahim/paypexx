@@ -94,6 +94,7 @@ const DeleteCard = ({ navigation, route }) => {
                             onChangeText={(text) => setNewCard({...newCard, cardHolder: text.toUpperCase()})}
                             placeholder="Ad Soyad"
                             autoCapitalize="characters"
+                            editable={false}
                         />
                     </View>
 
@@ -110,6 +111,7 @@ const DeleteCard = ({ navigation, route }) => {
                             }}
                             keyboardType="numeric"
                             maxLength={19}
+                            editable={false}
                         />
                         <View style={styles.cardLogos}>
                             <Image source={require('../../assets/images/icons/transaction/Mastercard.png')} style={styles.cardLogo} />
@@ -130,6 +132,7 @@ const DeleteCard = ({ navigation, route }) => {
                                 keyboardType="numeric"
                                 maxLength={5}
                                 rightIcon={require('../../assets/images/icons/transaction/bank2.png')}
+                                editable={false}
                             />
                         </View>
                         <View style={styles.expiryDateInput}>
@@ -141,6 +144,7 @@ const DeleteCard = ({ navigation, route }) => {
                                 keyboardType="numeric"
                                 maxLength={3}
                                 rightIcon={require('../../assets/images/icons/transaction/bank2.png')}
+                                editable={false}
                             />
                         </View>
                     </View>
